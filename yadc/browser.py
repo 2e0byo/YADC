@@ -57,17 +57,17 @@ class Browser:
     def port_arg(self) -> str:
         return f"--remote-debugging-port={self._port}"
 
-    def kill(self):
+    def kill(self, proc):
         self._logger.info("Killing Chrome")
-        if not self._proc:
+        if not proc:
             return
-        self._proc.terminate()
-        self._proc.wait(2)
-        if self._proc.poll():
+        proc.terminate()
+        proc.wait(2)
+        if proc.poll():
             self.logger.info("Failed to die: killing with SIGKILL")
-            self._proc.kill()
-            self._proc.wait(2)
-            if self._proc.poll():
+            proc.kill()
+            proc.wait(2)
+            if proc.poll():
                 raise BrowserError("Process failed to die")
 
     def launch_chrome(self):
@@ -114,5 +114,5 @@ class Browser:
         return driver
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.kill()
+        self.kill(self._proc)
         self._profile_dir.cleanup()
