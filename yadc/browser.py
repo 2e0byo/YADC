@@ -70,7 +70,7 @@ class Browser:
             if proc.poll():
                 raise BrowserError("Process failed to die")
 
-    def launch_chrome(self):
+    def launch_chrome(self, extra_args=None):
         self._logger.info("Starting chrome")
         cmd = [
             self._chrome,
@@ -81,6 +81,8 @@ class Browser:
             "--blink-settings=imagesEnabled=false",
             self._url,
         ]
+        if extra_args:
+            cmd.append(extra_args)
         # needed at present to prevent failure
         # chrome_options.experimental_options.pop("excludeSwitches")
         self._proc = Popen(cmd)
