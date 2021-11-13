@@ -1,8 +1,10 @@
 import numpy as np
 from time import sleep
 from logging import getLogger
+import logging
 
 logger = getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 def randsleep(target: int, max_: int = None):
@@ -15,8 +17,10 @@ def randsleep(target: int, max_: int = None):
     multiplier = 1
     while target < 100:
         multiplier *= 10
-        target *= multiplier
-        max_ *= multiplier
+        target *= 10
+        max_ *= 10
     duration = min(np.random.poisson(target), max_)
     logger.debug(f"Sleeping for {duration/multiplier} s")
+    print(f"Sleeping for {duration/multiplier} s")
+    print(duration, multiplier, target, target / multiplier, duration / multiplier)
     sleep(duration / multiplier)
