@@ -118,3 +118,23 @@ class Browser:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.kill(self._proc)
         self._profile_dir.cleanup()
+
+
+class TorBrowser(Browser):
+    """A browser tunneled by TOR."""
+
+    def start_tor(self):
+        cmd = ["tor", "--SocksPort", "8897"]
+        proc = Popen(cmd)
+        self._tor_proc = proc
+
+    def launch_chrome(self):
+        tor_args = [
+            '--proxy-server="socks5://localhost:8997"',
+            '--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE myproxy"',
+        ]
+        super().launch_chrome(extra_args=tor_args)
+
+    def __exit__(self, *args):
+        super().__exit__(*args)
+        self.kill(self._tor_proc)
