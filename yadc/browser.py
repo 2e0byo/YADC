@@ -6,6 +6,7 @@ from time import sleep
 
 import undetected_chromedriver as uc
 from selenium import webdriver
+from .humanlike import randsleep
 
 
 class BrowserError(Exception):
@@ -89,8 +90,8 @@ class Browser:
         # chrome_options.experimental_options.pop("excludeSwitches")
         self._proc = Popen(cmd)
 
-        self._logger.info("Waiting 20s for page to load and js to run.")
-        sleep(20)
+        self._logger.info("Waiting 10s for page to load and js to run.")
+        randsleep(10)
 
         driver = webdriver.Chrome(
             executable_path=self._chromedriver_path,
