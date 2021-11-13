@@ -22,6 +22,7 @@ class Browser:
         buster: Path = None,
         chrome: str = "google-chrome-stable",
         chromedriver_path: str = "chromedriver",
+        url: str = None,
     ):
         self._installed = False
         self._port = port or 8745
@@ -36,6 +37,7 @@ class Browser:
         self._logger = getLogger(self.name)
         self._proc = None
         self._chromedriver_path = chromedriver_path
+        self._url = url or self.URL
 
     @property
     def buster_arg(self) -> str:
@@ -76,7 +78,7 @@ class Browser:
             self.buster_arg,
             "--no-first-run",
             "--blink-settings=imagesEnabled=false",
-            self.URL,
+            self._url,
         ]
         chrome_options = webdriver.ChromeOptions()
 
