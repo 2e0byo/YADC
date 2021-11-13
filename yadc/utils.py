@@ -12,7 +12,7 @@ CAPTCHA_ATTEMPTS = 4
 
 def solve_captcha(driver: Chrome) -> bool:
     driver.switch_to.default_content()
-    iframe = driver.find_element("main-iframe")
+    iframe = driver.find_element(value="main-iframe")
     driver.switch_to.frame(iframe)
     iframe = driver.find_element(
         By.CSS_SELECTOR,
@@ -23,7 +23,7 @@ def solve_captcha(driver: Chrome) -> bool:
     driver.find_element(By.XPATH, "//span[@id='recaptcha-anchor']").click()
     driver.switch_to.default_content()
     randsleep(0.2)
-    iframe = driver.find_element_by_id("main-iframe")
+    iframe = driver.find_element(value="main-iframe")
     driver.switch_to.frame(iframe)
     if "Why am I seeing this page" in driver.page_source:
         logger.info("Completing catpcha 1")
