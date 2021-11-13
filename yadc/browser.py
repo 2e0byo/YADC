@@ -70,7 +70,7 @@ class Browser:
             if self._proc.poll():
                 raise BrowserError("Process failed to die")
 
-    def __enter__(self) -> webdriver.Chrome:
+    def launch_chrome(self):
         self._logger.info("Starting chrome")
         cmd = [
             self._chrome,
@@ -81,17 +81,20 @@ class Browser:
             "--blink-settings=imagesEnabled=false",
             self._url,
         ]
+        # needed at present to prevent failure
+        # chrome_options.experimental_options.pop("excludeSwitches")
+        self._proc = Popen(cmd)
+
+    def __enter__(self) -> webdriver.Chrome:
+        self.launch_chrome()
+
+        self._logger.info("Waiting 10s for page to load and js to run.")
+        randsleep(10)
         chrome_options = webdriver.ChromeOptions()
 
         chrome_options.add_experimental_option(
             "debuggerAddress", f"localhost:{self._port}"
         )
-        # needed at present to prevent failure
-        # chrome_options.experimental_options.pop("excludeSwitches")
-        self._proc = Popen(cmd)
-
-        self._logger.info("Waiting 10s for page to load and js to run.")
-        randsleep(10)
 
         driver = webdriver.Chrome(
             executable_path=self._chromedriver_path,
