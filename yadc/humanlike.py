@@ -22,5 +22,4 @@ def randsleep(target: int, max_: int = None):
     duration = min(np.random.poisson(target), max_)
     logger.debug(f"Sleeping for {duration/multiplier} s")
     print(f"Sleeping for {duration/multiplier} s")
-    print(duration, multiplier, target, target / multiplier, duration / multiplier)
     sleep(duration / multiplier)
