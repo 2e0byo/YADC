@@ -94,7 +94,7 @@ class Browser:
 
         driver = webdriver.Chrome(
             executable_path=self._chromedriver_path,
-            chrome_options=chrome_options,
+            options=chrome_options,
         )
 
         driver.execute_cdp_cmd(
