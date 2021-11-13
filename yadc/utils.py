@@ -1,7 +1,9 @@
+from logging import getLogger
+
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
-from humanlike import randsleep
-from logging import getLogger
+
+from .humanlike import randsleep
 
 logger = getLogger(__name__)
 
