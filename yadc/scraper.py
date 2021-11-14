@@ -21,11 +21,18 @@ class Test(BaseModel):
     centre: str
 
 
+class Centre(BaseModel):
+    """A centre and optional before date."""
+
+    centre: str
+    date: datetime = None
+
+
 class Driver(BaseModel):
     "A driver seeking a driving test."
     licence_number: str
     booking_ref: str
-    centres: list[str]
+    centres: list[Centre]
     not_before: datetime
     not_after: datetime
     disabled_dates: list[datetime] = None
@@ -162,9 +169,9 @@ class Scraper:
         centre = container.find_element(By.XPATH, ".//a")
         return centre.get_attribute("href")
 
-    def find_next_available(self, browser, driver, centre):
-        self._logger.info(f"Trying centre {centre}")
-        if centre == driver.current_test.centre:
+    def find_next_available(self, browser: Chrome, driver: Driver, centre: Centre):
+        self._logger.info(f"Trying centre {centre.centre}")
+        if centre.centre == driver.current_test.centre:
             back = 2
             browser.find_element(value="date-time-change").click()
             randsleep(1)
@@ -177,7 +184,7 @@ class Scraper:
         else:
             back = 3
             refresh_url = driver.refresh_urls.get(
-                centre, self.get_centre_url(browser, centre)
+                centre.centre, self.get_centre_url(browser, centre.centre)
             )
             browser.get(refresh_url)
             randsleep(1)
@@ -200,7 +207,7 @@ class Scraper:
             self._logger.info("No tests available.")
             return back
 
-        day, el = self._scan_for_test(browser, driver)
+        day, el = self._scan_for_test(browser, driver, centre)
         if not day:
             self._logger.info("No tests in required range.")
             return back
@@ -214,7 +221,7 @@ class Scraper:
         # click
         # reserve test
 
-    def _scan_for_test(self, browser: Chrome, driver):
+    def _scan_for_test(self, browser: Chrome, driver: Driver, centre: Centre):
         cal = browser.find_element(By.CLASS_NAME, "BookingCalendar-datesBody")
         days = cal.find_elements(By.XPATH, ".//td")
         for day in days:
@@ -225,7 +232,8 @@ class Scraper:
 
             # note that we cannot find multiple tests on the same day
             # this could be fixed, quite easily
-            if date.date() >= driver.current_test.date.date():
+            before_date = centre.date or driver.current_test.date
+            if date.date() >= before_date.date():
                 continue
             if driver.disabled_dates and date in driver.disabled_dates:
                 continue
