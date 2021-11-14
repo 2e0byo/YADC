@@ -12,30 +12,59 @@ YADC is yet another checker for driving cancellations in the UK.
   should be a better framework for the next generation to come along and do the
   same.
 
-** Appeal to DVSA
-   The current situation is a mess.  Because of the pandemic, there are no tests
-   for months; that is not your fault.  So we are all forced either to wait for
-   months, or to book a last-minute cancellation. But we can't do that, because
-   all the companies using bots to find tests snatch them up.  So we all use
-   those companies; and then DVSA's website becomes even more useless.  There
-   are two *easy* solutions you could adopt:
+* Features
+  YADC is:
 
-   - Add an auto-booking with queue feature to the website.  Once a test is
-     booked you get to specify criteria for a better test, and enter in a queue.
-     When you rise to the top of that queue, you get whatever matches reserved
-     for you.  In other words, implement the third-party solution yourself.  I
-     would gladly pay a reasonable sum for it.  And the third-party firms will
-     go out of business and stop spamming your website.
+  - cleanly written and object-oriented
+  - neat.  We use a context manager to handle the browser; I'm pretty proud of
+    that.
+  - easy to extend
+  - easy (hopefully) to get around the next rubbish DVSA put up
+  - pretty immune to blocking (thanks to TOR)
 
-   - Add an API, and charge for access.  That way the third parties will use the
-     API.  You can release tests to the API after x minutes to give humans a
-     chance as well.  You can go after anyone who tries to use a bot to get
-     round the limit, and providing your API is reasonable, nobody will mind.
+  YADC is not:
 
-   Instead of these, you make the already useless website even harder to use.
-   Bot protection is an uphill battle.  So is bot developing.  The only people
-   who profit from this are companies like google (via chrome/chromium).
+  - my idea.  I started with [[https://github.com/tp223/Driving-Test-Cancellations][this repo]] and extensively rewrote the logic from
+    the ground up.  I got the idea of the poisson sleep from [[https://github.com/birdcolour/dvsa-practicals][this repo]], although
+    I didn't take any code directly from anything.
+  - infallible
+  - capable of booking tests for you  (This could be added, but there are
+    currently no tests to practice on...)
+  - always going to work
+  - properly supported
+
+* Installation
+  - clone the repo
+  - run `poetry install`
+  - run `poetry shell`
+  - (optional) download [[https://github.com/dessant/buster/releases][buster]] and unzip.
+  - (optional) install `tor` and ensure it can be run as a user.
+  - edit `main.py` with your setup.
+  - run `python -m yadc.main`
+
+ Currently there is no CLI, although it would be a doddle to add one.
+   
+* Appeal to DVSA
+  The current situation is a mess.  Because of the pandemic, there are no tests
+  for months; that is not your fault.  So we are all forced either to wait for
+  months, or to book a last-minute cancellation. But we can't do that, because
+  all the companies using bots to find tests snatch them up.  So we all use
+  those companies; and then DVSA's website becomes even more useless.  There
+  are two *easy* solutions you could adopt:
+
+  - Add an auto-booking with queue feature to the website.  Once a test is
+    booked you get to specify criteria for a better test, and enter in a queue.
+    When you rise to the top of that queue, you get whatever matches reserved
+    for you.  In other words, implement the third-party solution yourself.  I
+    would gladly pay a reasonable sum for it.  And the third-party firms will
+    go out of business and stop spamming your website.
+
+  - Add an API, and charge for access.  That way the third parties will use the
+    API.  You can release tests to the API after x minutes to give humans a
+    chance as well.  You can go after anyone who tries to use a bot to get
+    round the limit, and providing your API is reasonable, nobody will mind.
+
+  Instead of these, you make the already useless website even harder to use.
+  Bot protection is an uphill battle.  So is bot developing.  The only people
+  who profit from this are companies like google (via chrome/chromium).
   
-  
-
-
