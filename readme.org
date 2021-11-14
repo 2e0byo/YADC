@@ -21,6 +21,9 @@ YADC is yet another checker for driving cancellations in the UK.
   - easy to extend
   - easy (hopefully) to get around the next rubbish DVSA put up
   - pretty immune to blocking (thanks to TOR)
+  - pretty colourful, too. We have coloured logs (thanks to `coloredlogs`),
+    spinners (thanks to `Halo`) and well-formatted output. When things go wrong,
+    we save a traceback, a screenshot, and the html the browser was seeing.
 
   YADC is not:
 
