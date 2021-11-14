@@ -239,7 +239,6 @@ class Scraper:
             errs = deque([], maxlen=5)
 
             try:
-                # browser = self._browser.__enter__()
                 with self._browser as browser:
                     while True:
                         for driver in self.drivers:
