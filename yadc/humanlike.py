@@ -2,9 +2,9 @@ import numpy as np
 from time import sleep
 from logging import getLogger
 import logging
+from halo import Halo
 
 logger = getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 def randsleep(target: int, max_: int = None):
@@ -21,5 +21,9 @@ def randsleep(target: int, max_: int = None):
         max_ *= 10
     duration = min(np.random.poisson(target), max_)
     logger.debug(f"Sleeping for {duration/multiplier} s")
-    print(f"Sleeping for {duration/multiplier} s")
-    sleep(duration / multiplier)
+    duration /= multiplier
+    if duration > 10:
+        with Halo(spinner="dots"):
+            sleep(duration)
+    else:
+        sleep(duration)

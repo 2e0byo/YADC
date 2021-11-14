@@ -11,6 +11,7 @@ undetected-chromedriver = "^3.0.3"
 numpy = "^1.21.4"
 pydantic = "^1.8.2"
 coloredlogs = "^15.0.1"
+halo = "^0.0.31"
 
 [tool.poetry.dev-dependencies]
 devtools = "^0.8.0"
