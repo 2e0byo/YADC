@@ -10,10 +10,36 @@ import undetected_chromedriver as uc
 from selenium import webdriver
 
 from .humanlike import randsleep
+from .utils import solve_captcha
 
 
 class BrowserError(Exception):
     pass
+
+
+class CaptchaChrome(webdriver.Chrome):
+    """A Chrome which will try to solve captchas for you."""
+
+    def bypass(self):
+        for _ in range(2):
+            if "unsuccessful. Incapsula" in self.page_source:
+                randsleep(5)
+                self.refresh()
+            else:
+                break
+
+            if "unsuccessful. Incapsula" in self.page_source:
+                randsleep(2)
+                solve_captcha(self)
+            else:
+                break
+
+            if "unsuccessful. Incapsula" in self.page_source:
+                randsleep(150)
+
+    def find_element(self, *args, **kwargs):
+        self.bypass()
+        return super().find_element(*args, **kwargs)
 
 
 class Browser:
@@ -136,7 +162,7 @@ class Browser:
             "debuggerAddress", f"localhost:{self._port}"
         )
 
-        driver = webdriver.Chrome(
+        driver = CaptchaChrome(
             executable_path=self._chromedriver_path,
             options=chrome_options,
         )
