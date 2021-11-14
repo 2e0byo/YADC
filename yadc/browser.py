@@ -8,6 +8,7 @@ from time import sleep
 
 import undetected_chromedriver as uc
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 
 from .humanlike import randsleep
 from .utils import solve_captcha
@@ -31,6 +32,47 @@ class CaptchaChrome(webdriver.Chrome):
         self._logger = getLogger(name)
         super().__init__(*args, **kwargs)
 
+    def solve_captcha(self) -> bool:
+       self.switch_to.default_content()
+       iframe = self.find_element(value="main-iframe", bypass=False)
+       self.switch_to.frame(iframe)
+       iframe = self.find_element(
+           By.CSS_SELECTOR,
+           "iframe[name*='a-'][src*='https://www.google.com/recaptcha/api2/anchor?']",
+           bypass=False
+       )
+       self.switch_to.frame(iframe)
+       randsleep(0.2)
+       self.find_element(By.XPATH, "//span[@id='recaptcha-anchor']", bypass=False).click()
+       self.switch_to.default_content()
+       randsleep(0.2)
+       iframe = self.find_element(value="main-iframe", bypass=False)
+       self.switch_to.frame(iframe)
+       if "Why am I seeing this page" in self.page_source:
+           logger.info("Completing catpcha 1")
+           randsleep(0.2)
+
+           iframe = self.find_element(
+               By.CSS_SELECTOR,
+               "iframe[title*='recaptcha challenge'][src*='https://www.google.com/recaptcha/api2/bframe?']",
+               bypass=False
+           )
+           self.switch_to.frame(iframe)
+           randsleep(0.2)
+
+           for _ in range(CAPTCHA_ATTEMPTS):
+               logger.info("Completing catpcha")
+               # let buster do it for us:
+               self.find_elements(By.CLASS_NAME, "help-button-holder", bypass=False)[0].click()
+               randsleep(5)
+               if "Multiple correct solutions required" not in self.page_source:
+                   break
+
+           self.switch_to.default_content()
+           randsleep(0.5)
+
+       return "Why am I seeing this page" in self.page_source
+
     def bypass(self):
         """Try to bypass security."""
 
@@ -52,7 +94,7 @@ class CaptchaChrome(webdriver.Chrome):
 
                 if self.INCAPSULA in self.page_source:
                     randsleep(2)
-                    solve_captcha(self)
+                    self.solve_captcha()
                 else:
                     solved = True
 
@@ -66,11 +108,14 @@ class CaptchaChrome(webdriver.Chrome):
         if solved:
             self._logger.info("Solved Captcha!")
         else:
+            self._logger.error("Unable to beat Captcha")
             raise BrowserError("Unable to beat Captcha")
 
-    def find_element(self, *args, **kwargs):
-        self.bypass()
-        return super().find_element(*args, **kwargs)
+    def find_element(self, by=None, value=None, bypass=True):
+        if bypass:
+            self.bypass()
+        args = dict(by=by, value=value)
+        return super().find_element(**{k:v for k, v in args.items() if v})
 
 
 class Browser:
