@@ -233,7 +233,7 @@ class Scraper:
                 self._logger.info("Website not currently available; sleeping.")
 
             while self.dvsa_disabled():
-                sleep(60)
+                randsleep(60) # has spinner
 
             printed = False
             errs = deque([], maxlen=5)
