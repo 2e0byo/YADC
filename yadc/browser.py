@@ -20,22 +20,38 @@ class BrowserError(Exception):
 class CaptchaChrome(webdriver.Chrome):
     """A Chrome which will try to solve captchas for you."""
 
+    INCAPSULA = "unsuccessful. Incapsula"
+    BLOCKED = "Access denied"
+
     def bypass(self):
-        for _ in range(2):
-            if "unsuccessful. Incapsula" in self.page_source:
-                randsleep(5)
-                self.refresh()
-            else:
-                break
 
-            if "unsuccessful. Incapsula" in self.page_source:
-                randsleep(2)
-                solve_captcha(self)
-            else:
-                break
+        if self.BLOCKED in self.page_source:
+            raise BrowserError("Blocked")
 
-            if "unsuccessful. Incapsula" in self.page_source:
-                randsleep(150)
+        elif self.INCAPSULA in self.page_source:
+
+            for _ in range(2):
+
+                if self.INCAPSULA in self.page_source:
+                    randsleep(5)
+                    self.refresh()
+                else:
+                    return
+
+                if self.INCAPSULA in self.page_source:
+                    randsleep(2)
+                    solve_captcha(self)
+                else:
+                    return
+
+                if self.INCAPSULA in self.page_source:
+                    randsleep(150)
+                else:
+                    return
+        else:
+            return
+
+        raise BrowserError("Unable to beat Captcha")
 
     def find_element(self, *args, **kwargs):
         self.bypass()

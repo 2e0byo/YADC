@@ -81,38 +81,17 @@ class Scraper:
     def parse_timestr(timestr: str) -> datetime:
         return datetime.strptime(timestr, "%A %d %B %Y %I:%M%p")
 
-    def bypass(self, browser: Chrome):
-        for _ in range(2):
-            if "unsuccessful. Incapsula" in browser.page_source:
-                randsleep(5)
-                browser.refresh()
-            else:
-                break
-
-            if "unsuccessful. Incapsula" in browser.page_source:
-                randsleep(2)
-                solve_captcha(browser)
-            else:
-                break
-
-            if "unsuccessful. Incapsula" in browser.page_source:
-                self._logger.info("We hit some kind of block.  Waiting it out.")
-                randsleep(150)
-
-        if "unsuccessful. Incapsula" in browser.page_source:
-            raise ScraperError("Unable to bypass security.")
-
     def login(self, browser: Chrome, driver: Driver):
         if self.logged_in:
             return
 
-        self.bypass(browser)
+        browser.bypass()
         if "queue" in browser.current_url:
             self._logger.info("Queuing...")
         while "queue" in browser.current_url:
             sleep(2)
         randsleep(3)
-        self.bypass(browser)
+        browser.bypass()
 
         el = browser.find_element(value="driving-licence-number")
         el.click()
@@ -201,7 +180,7 @@ class Scraper:
                 "Enter details below",
             )
         ):
-            self.bypass(browser)
+            browser.bypass()  # is this needed now we handle on getting?
 
         if "no tests available" in page:
             self._logger.info("No tests available.")
