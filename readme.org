@@ -21,8 +21,8 @@ YADC is yet another checker for driving cancellations in the UK.
   - easy to extend
   - easy (hopefully) to get around the next rubbish DVSA put up
   - pretty immune to blocking (thanks to TOR)
-  - pretty colourful, too. We have coloured logs (thanks to `coloredlogs`),
-    spinners (thanks to `Halo`) and well-formatted output. When things go wrong,
+  - pretty colourful, too. We have coloured logs (thanks to ~coloredlogs~),
+    spinners (thanks to ~Halo~) and well-formatted output. When things go wrong,
     we save a traceback, a screenshot, and the html the browser was seeing.
 
   YADC is not:
@@ -38,12 +38,12 @@ YADC is yet another checker for driving cancellations in the UK.
 
 * Installation
   - clone the repo
-  - run `poetry install`
-  - run `poetry shell`
+  - run ~poetry install~
+  - run ~poetry shell~
   - (optional) download [[https://github.com/dessant/buster/releases][buster]] and unzip.
-  - (optional) install `tor` and ensure it can be run as a user.
-  - edit `main.py` with your setup.
-  - run `python -m yadc.main`
+  - (optional) install ~tor~ and ensure it can be run as a user.
+  - edit ~main.py~ with your setup.
+  - run ~python -m yadc.main~
 
  Currently there is no CLI, although it would be a doddle to add one.
    
