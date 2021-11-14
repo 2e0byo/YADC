@@ -22,13 +22,25 @@ class CaptchaChrome(webdriver.Chrome):
 
     INCAPSULA = "unsuccessful. Incapsula"
     BLOCKED = "Access denied"
+    instances = []
+
+    def __init__(self, *args, **kwargs):
+        i = max(self.instances) + 1 if self.instances else 1
+        self.instances.append(i)
+        name = f"CaptchaChrome-{i}"
+        self._logger = getLogger(name)
+        super().__init__(*args, **kwargs)
 
     def bypass(self):
+        """Try to bypass security."""
 
+        solved = False
         if self.BLOCKED in self.page_source:
+            self._logger.error("Blocked")
             raise BrowserError("Blocked")
 
         elif self.INCAPSULA in self.page_source:
+            self._logger.info("Trying to solve captcha.")
 
             for _ in range(2):
 
@@ -36,22 +48,25 @@ class CaptchaChrome(webdriver.Chrome):
                     randsleep(5)
                     self.refresh()
                 else:
-                    return
+                    solved = True
 
                 if self.INCAPSULA in self.page_source:
                     randsleep(2)
                     solve_captcha(self)
                 else:
-                    return
+                    solved = True
 
                 if self.INCAPSULA in self.page_source:
                     randsleep(150)
                 else:
-                    return
+                    solved = True
         else:
             return
 
-        raise BrowserError("Unable to beat Captcha")
+        if solved:
+            self._logger.info("Solved Captcha!")
+        else:
+            raise BrowserError("Unable to beat Captcha")
 
     def find_element(self, *args, **kwargs):
         self.bypass()
