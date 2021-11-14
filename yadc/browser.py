@@ -1,11 +1,14 @@
+import traceback as tb
+from datetime import datetime
 from logging import getLogger
 from pathlib import Path
-from subprocess import Popen
+from subprocess import PIPE, Popen
 from tempfile import TemporaryDirectory
 from time import sleep
 
 import undetected_chromedriver as uc
 from selenium import webdriver
+
 from .humanlike import randsleep
 
 
@@ -14,19 +17,49 @@ class BrowserError(Exception):
 
 
 class Browser:
+    """A browser driven by a driver over the debug interface.
+
+    We start the browser *first* and navigate to the login page whilst the
+    browser is 'clean', i.e. not controlled remotely.  This allows DVSA's
+    profiling JS to run against a pretty clean browser.  We then block the
+    profiling script, which seems to work, at least for a short while.
+    (Otherwise we just get blocked.)"""
+
     URL = "https://driverpracticaltest.dvsa.gov.uk/login"
     instances = []
 
     def __init__(
         self,
-        port: int = None,
+        port: int = 8745,
         buster: Path = None,
         chrome: str = "google-chrome-stable",
         chromedriver_path: str = "chromedriver",
         url: str = None,
+        errors_dir: Path = None,
+        dump_on_error: bool = True,
     ):
+        """Setup the Browser.
+
+        Args:
+
+            port (int): the port to use for remote management.  (Default: 8745)
+
+            buster (Path): path to the unzipped buster extension.  If you don't
+                           provide this, captchas will be unsolveable.
+
+            chrome (str): path to the Chrome executable on your system.
+
+            chromedrive_path(str): path to the chromedriver executable on your system.
+
+            url (str): the url to point the browser to, if not the default DVSA one.
+
+            errors_dir (Path): where to save errors.
+
+            dump_on_error (bool): whether to save error dumps for debugging.
+                                  (Default: True)
+        """
         self._installed = False
-        self._port = port or 8745
+        self._port = port
         if buster and not buster.is_dir():
             raise BrowserError("Please unzip buster and pass the dir.")
         self._buster = buster
@@ -39,6 +72,8 @@ class Browser:
         self._proc = None
         self._chromedriver_path = chromedriver_path
         self._url = url or self.URL
+        self._errors_dir = errors_dir or Path(f"./errors/{self.name}")
+        self.dump_on_error = dump_on_error
 
     @property
     def buster_arg(self) -> str:
@@ -51,14 +86,14 @@ class Browser:
     def profile_arg(self) -> str:
         if not self._profile_dir:
             self._profile_dir = TemporaryDirectory()
-        return f"--user-data-dir={self._profile_dir}"
+        return f"--user-data-dir={self._profile_dir.name}"
 
     @property
     def port_arg(self) -> str:
         return f"--remote-debugging-port={self._port}"
 
-    def kill(self, proc):
-        self._logger.info("Killing Chrome")
+    def kill(self, proc, name):
+        self._logger.info(f"Killing {name}")
         if not proc:
             return
         proc.terminate()
@@ -82,10 +117,13 @@ class Browser:
             self._url,
         ]
         if extra_args:
-            cmd.append(extra_args)
+            cmd = cmd[:1] + extra_args + cmd[1:]
         # needed at present to prevent failure
         # chrome_options.experimental_options.pop("excludeSwitches")
-        self._proc = Popen(cmd)
+
+        # Needed to launch in the right env with a new config
+        # TODO: figure out what's actually happening here and fix this.
+        self._proc = Popen(" ".join(cmd), shell=True)
 
     def __enter__(self) -> webdriver.Chrome:
         self.launch_chrome()
@@ -113,28 +151,61 @@ class Browser:
         )
         driver.execute_cdp_cmd("Network.enable", {})
         driver.refresh()
+        self._driver = driver
         return driver
 
+    def _dump(self, *err):
+        self._errors_dir.mkdir(parents=True, exist_ok=True)
+        outf = self._errors_dir / f"error-{datetime.now()}.txt"
+        with outf.open("w") as f:
+            f.write("".join(tb.format_exception(*err)))
+        with outf.with_suffix(".html").open("w") as f:
+            f.write(self._driver.page_source)
+        self._driver.save_screenshot(str(outf.with_suffix(".png")))
+        self._logger.info(f"Saved error dump in {outf}")
+
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.kill(self._proc)
+        if exc_val and self.dump_on_error:
+            self._dump(exc_type, exc_val, exc_tb)
+
+        self.kill(self._proc, "Chrome")
         self._profile_dir.cleanup()
+        return False if exc_val else None
 
 
 class TorBrowser(Browser):
-    """A browser tunneled by TOR."""
+    """A browser tunneled by TOR.
+
+    We start the `tor` daemon ourselves so as to have a random IP. This will
+    *only* work if you can run `tor` as your user. This will require removing
+    the `User` option in the default `torrc`.
+
+    The exit handler here kills the tor process, so we get a new ip for next
+    time. This seems to reduce (although not eliminate?) getting profile
+    blocked.
+    """
+
+    PORT = "8897"
 
     def start_tor(self):
-        cmd = ["tor", "--SocksPort", "8897"]
-        proc = Popen(cmd)
+        self._logger.info("Starting Tor")
+        cmd = ["tor", "--SocksPort", self.PORT]
+        proc = Popen(cmd, stdout=PIPE, encoding="utf8")
         self._tor_proc = proc
+        self._logger.info("Started Tor")
 
     def launch_chrome(self):
+        self.start_tor()
         tor_args = [
-            '--proxy-server="socks5://localhost:8997"',
-            '--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE myproxy"',
+            f'--proxy-server="socks4://localhost:{self.PORT}"',
+            # disable prefetch, as for some reason it's not proxied (?!)
+            "--dns-prefetch-disable"
+            # apparently this should be more resilient than merely disabling prefetch
+            # but it doesn't seem to work
+            # '--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE myproxy"',
         ]
         super().launch_chrome(extra_args=tor_args)
 
     def __exit__(self, *args):
         super().__exit__(*args)
-        self.kill(self._tor_proc)
+        self.kill(self._tor_proc, "Tor")
