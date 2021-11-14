@@ -264,5 +264,6 @@ class TorBrowser(Browser):
         super().launch_chrome(extra_args=tor_args)
 
     def __exit__(self, *args):
-        super().__exit__(*args)
+        ret = super().__exit__(*args)
         self.kill(self._tor_proc, "Tor")
+        return ret
