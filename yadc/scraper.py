@@ -131,6 +131,7 @@ class Scraper:
         )
         driver.current_test = Test(date=date, centre=centre)
         for centre in driver.centres:
+            randsleep(1.5)
             depth = self.find_next_available(browser, driver, centre)
             for _ in range(depth):
                 browser.back()
