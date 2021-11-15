@@ -63,7 +63,7 @@ class Scraper:
         self.drivers = drivers
         for driver in self.drivers:
             driver.refresh_urls = {}
-        self.logged_in = False
+        self._logged_in = False
 
     @staticmethod
     def dvsa_disabled():
@@ -80,6 +80,10 @@ class Scraper:
     @staticmethod
     def parse_timestr(timestr: str) -> datetime:
         return datetime.strptime(timestr, "%A %d %B %Y %I:%M%p")
+
+    @property
+    def logged_in(self):
+        return all(self._logged_in and "queue" not in browser.current_url)
 
     def login(self, browser: Chrome, driver: Driver):
         if self.logged_in:
@@ -108,7 +112,7 @@ class Scraper:
 
         if "loginError=true" in browser.current_url:
             raise LoginError("Unable to login.")
-        self.logged_in = True
+        self._logged_in = True
 
     def find_tests(self, browser: Chrome, driver: Driver):
         self.login(browser, driver)
