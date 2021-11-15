@@ -49,7 +49,7 @@ class CaptchaChrome(webdriver.Chrome):
        iframe = self.find_element(value="main-iframe", bypass=False)
        self.switch_to.frame(iframe)
        if "Why am I seeing this page" in self.page_source:
-           logger.info("Completing catpcha 1")
+           self._logger.info("Completing catpcha 1")
            randsleep(0.2)
 
            iframe = self.find_element(
@@ -61,7 +61,7 @@ class CaptchaChrome(webdriver.Chrome):
            randsleep(0.2)
 
            for _ in range(CAPTCHA_ATTEMPTS):
-               logger.info("Completing catpcha")
+               self._logger.info("Completing catpcha")
                # let buster do it for us:
                self.find_elements(By.CLASS_NAME, "help-button-holder", bypass=False)[0].click()
                randsleep(5)
