@@ -265,6 +265,9 @@ class Browser:
         outf = self._errors_dir / f"error-{datetime.now()}.txt"
         with outf.open("w") as f:
             f.write("".join(tb.format_exception(*err)))
+            f.write("\n")
+            f.write("Whilst visiting:")
+            f.write(browser.current_url)
         with outf.with_suffix(".html").open("w") as f:
             f.write(self._driver.page_source)
         self._driver.save_screenshot(str(outf.with_suffix(".png")))
