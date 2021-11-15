@@ -83,13 +83,13 @@ class Scraper:
 
     @property
     def logged_in(self) -> bool:
-        return self._logged_in and "queue" not in browser.current_url
+        return self._logged_in and "queue" not in self._browser.current_url
 
     def login(self, browser: Chrome, driver: Driver):
         if self.logged_in:
             return
 
-        browser.bypass()
+        browser.bypass() # TODO: use self._browser throughout
         if "queue" in browser.current_url:
             self._logger.info("Queuing...")
         while "queue" in browser.current_url:
