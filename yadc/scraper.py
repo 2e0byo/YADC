@@ -249,6 +249,7 @@ class Scraper:
             except Exception as e:
                 errs.append(monotonic())
                 self._logger.exception(e)
+                randsleep(30) # try not to be too predictable
 
             if len(errs) == 5 and errs[-1] - errs[0] < 10 * 60:
                 msg = (
