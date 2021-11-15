@@ -5,6 +5,7 @@ from pathlib import Path
 from subprocess import PIPE, Popen
 from tempfile import TemporaryDirectory
 from time import sleep
+from fake_useragent import UserAgent
 
 import undetected_chromedriver as uc
 from selenium import webdriver
@@ -209,6 +210,8 @@ class Browser:
 
     def launch_chrome(self, extra_args=None):
         self._logger.info("Starting chrome")
+        ua = UserAgent().random
+        self._logger.info(f"This time we are {ua}")
         cmd = [
             self._chrome,
             self.port_arg,
@@ -216,6 +219,7 @@ class Browser:
             self.buster_arg,
             "--no-first-run",
             "--blink-settings=imagesEnabled=false",
+            f'--user-agent="{ua}"',
             self._url,
         ]
         if extra_args:
