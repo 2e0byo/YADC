@@ -119,6 +119,8 @@ class Scraper:
             raise ScraperError("Maximum rebookings exceeded.")
 
         contents_container = browser.find_elements(By.CLASS_NAME, "contents")
+        if not contents_container:
+            raise ScraperError("Failed to find contents container.")
         date = self.parse_timestr(
             contents_container[0]
             .find_element(By.XPATH, ".//dd")
