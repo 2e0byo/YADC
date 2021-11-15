@@ -268,7 +268,10 @@ class Browser:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_val and self.dump_on_error:
-            self._dump(exc_type, exc_val, exc_tb)
+            try:
+                self._dump(exc_type, exc_val, exc_tb)
+            except Exception as e:
+                tb.print_exc()
 
         self.kill(self._proc, "Chrome")
         self._profile_dir.cleanup()
