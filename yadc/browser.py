@@ -88,7 +88,7 @@ class CaptchaChrome(webdriver.Chrome):
 
             for _ in range(2):
 
-                if self.INCAPSULA in self.page_source:
+                if self.INCAPSULA in self.page_source and "iframe" not in self.page_source:
                     randsleep(5)
                     self.refresh()
                 else:
