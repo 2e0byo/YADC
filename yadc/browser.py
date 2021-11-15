@@ -24,6 +24,7 @@ class CaptchaChrome(webdriver.Chrome):
 
     INCAPSULA = "unsuccessful. Incapsula"
     BLOCKED = "Access denied"
+    CAPTCHA_ATTEMPTS = 4
     instances = []
 
     def __init__(self, *args, **kwargs):
@@ -61,7 +62,7 @@ class CaptchaChrome(webdriver.Chrome):
            self.switch_to.frame(iframe)
            randsleep(0.2)
 
-           for _ in range(CAPTCHA_ATTEMPTS):
+           for _ in range(self.CAPTCHA_ATTEMPTS):
                self._logger.info("Completing catpcha")
                # let buster do it for us:
                self.find_elements(By.CLASS_NAME, "help-button-holder", bypass=False)[0].click()
