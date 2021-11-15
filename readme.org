@@ -46,6 +46,16 @@ YADC is yet another checker for driving cancellations in the UK.
   - run ~python -m yadc.main~
 
  Currently there is no CLI, although it would be a doddle to add one.
+
+* Usage
+  Currently you have to be at the computer to do anything.  You will see the
+  browser moving, which should help.  If you want to interact with it manually,
+  hit `Ctrl-z` in the terminal to stop execution of the script, and the browser
+  is yours (note that manual interaction increases the chance of being detected
+  by some anti-bot measures).  If the script finds a test it will notify you
+  with the notify function you set (the default is just `print`, so do set
+  something more appropriate!  A nice service is `pushover`, though it does have
+  a once-off payment).  If the script does find a test it will block
    
 * Appeal to DVSA
   The current situation is a mess.  Because of the pandemic, there are no tests
