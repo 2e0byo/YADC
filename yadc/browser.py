@@ -203,7 +203,7 @@ class Browser:
         proc.terminate()
         proc.wait(2)
         if proc.poll():
-            self.logger.info("Failed to die: killing with SIGKILL")
+            self._logger.info("Failed to die: killing with SIGKILL")
             proc.kill()
             proc.wait(2)
             if proc.poll():
