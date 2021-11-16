@@ -137,7 +137,7 @@ class Browser:
         port: int = 8745,
         buster: Path = None,
         chrome: str = "google-chrome-stable",
-        chromedriver_path: str = "chromedriver",
+        chromedriver: str = "chromedriver",
         url: str = None,
         errors_dir: Path = None,
         dump_on_error: bool = True,
@@ -174,7 +174,7 @@ class Browser:
         self.name = f"Browser-{i}"
         self._logger = getLogger(self.name)
         self._proc = None
-        self._chromedriver_path = chromedriver_path
+        self._chromedriver = chromedriver
         self._url = url or self.URL
         self._errors_dir = errors_dir or Path(f"./errors/{self.name}")
         self.dump_on_error = dump_on_error
@@ -244,7 +244,7 @@ class Browser:
         )
 
         driver = CaptchaChrome(
-            executable_path=self._chromedriver_path,
+            executable_path=self._chromedriver,
             options=chrome_options,
         )
 
