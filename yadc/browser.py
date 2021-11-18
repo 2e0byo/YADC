@@ -202,11 +202,11 @@ class Browser:
             return
         proc.terminate()
         proc.wait(2)
-        if proc.poll():
+        if proc.poll() is None:
             self._logger.info("Failed to die: killing with SIGKILL")
             proc.kill()
             proc.wait(2)
-            if proc.poll():
+            if proc.poll() is None:
                 raise BrowserError("Process failed to die")
 
     def launch_chrome(self, extra_args=None):
