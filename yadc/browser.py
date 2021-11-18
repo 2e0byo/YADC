@@ -65,7 +65,7 @@ class CaptchaChrome(webdriver.Chrome):
            for _ in range(self.CAPTCHA_ATTEMPTS):
                self._logger.info("Completing catpcha")
                # let buster do it for us:
-               self.find_elements(By.CLASS_NAME, "help-button-holder", bypass=False)[0].click()
+               self.find_elements(By.CLASS_NAME, "help-button-holder")[0].click()
                randsleep(5)
                if "Multiple correct solutions required" not in self.page_source:
                    break
