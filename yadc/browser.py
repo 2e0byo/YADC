@@ -268,7 +268,7 @@ class Browser:
             f.write("".join(tb.format_exception(*err)))
             f.write("\n")
             f.write("Whilst visiting:")
-            f.write(browser.current_url)
+            f.write(self._driver.current_url)
         with outf.with_suffix(".html").open("w") as f:
             f.write(self._driver.page_source)
         self._driver.save_screenshot(str(outf.with_suffix(".png")))
