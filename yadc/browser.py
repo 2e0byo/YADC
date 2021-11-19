@@ -318,9 +318,13 @@ class TorBrowser(Browser):
 
     PORT = "8897"
 
+    def __init__(self, tor: str = "tor", **kwargs):
+        super().__init__(**kwargs)
+        self._tor = tor
+
     def start_tor(self):
         self._logger.info("Starting Tor")
-        cmd = ["tor", "--SocksPort", self.PORT]
+        cmd = [self._tor, "--SocksPort", self.PORT]
         proc = Popen(cmd, stdout=PIPE, encoding="utf8")
         self._tor_proc = proc
         self._logger.info("Started Tor")
