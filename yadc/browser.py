@@ -22,6 +22,7 @@ class CaptchaChrome(webdriver.Chrome):
 
     INCAPSULA = "unsuccessful. Incapsula"
     BLOCKED = "Access denied"
+    SUSPICIOUS = "Pardon our interruption"
     CAPTCHA_ATTEMPTS = 4
     instances = []
 
@@ -79,7 +80,7 @@ class CaptchaChrome(webdriver.Chrome):
         """Try to bypass security."""
 
         solved = False
-        if self.BLOCKED in self.page_source:
+        if any(x in self.page_source for x in (self.BLOCKED, self.SUSPICIOUS)):
             self._logger.error("Blocked")
             raise BrowserError("Blocked")
 
