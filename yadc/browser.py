@@ -5,6 +5,7 @@ from pathlib import Path
 from subprocess import PIPE, Popen
 from tempfile import TemporaryDirectory
 from fake_useragent import UserAgent
+from psutil import Process
 
 import undetected_chromedriver as uc
 from selenium import webdriver
@@ -203,6 +204,14 @@ class Browser:
         self._logger.info(f"Killing {name}")
         if not proc:
             return
+
+        sysproc = Process(proc.pid)
+        for child in sysproc.children(recursive=True):
+            child.terminate()
+
+        for child in sysproc.children(recursive=True):
+            child.kill()
+
         proc.terminate()
         proc.wait(2)
         if proc.poll() is None:
