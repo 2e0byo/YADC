@@ -19,7 +19,7 @@ class BrowserError(Exception):
     pass
 
 
-class CaptchaChrome(webdriver.Chrome):
+class CaptchaChrome(uc.Chrome):
     """A Chrome which will try to solve captchas for you."""
 
     INCAPSULA = "unsuccessful. Incapsula"
