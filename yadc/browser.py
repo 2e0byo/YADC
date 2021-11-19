@@ -7,7 +7,6 @@ from tempfile import TemporaryDirectory
 from fake_useragent import UserAgent
 from psutil import Process
 
-import undetected_chromedriver.v2 as uc
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
