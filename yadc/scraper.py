@@ -82,7 +82,7 @@ class Scraper:
         return datetime.strptime(timestr, "%A %d %B %Y %I:%M%p")
 
     def logged_in(self, browser) -> bool:
-        return self._logged_in and "queue" not in browser.current_url
+        return self._logged_in and "queue" not in browser.current_url and "/login" not in browser.page_source
 
     def login(self, browser: Chrome, driver: Driver):
         if self.logged_in(browser):
