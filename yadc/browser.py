@@ -206,10 +206,16 @@ class Browser:
 
         sysproc = Process(proc.pid)
         for child in sysproc.children(recursive=True):
-            child.terminate()
+            try:
+                child.terminate()
+            except Exception:
+                pass
 
         for child in sysproc.children(recursive=True):
-            child.kill()
+            try:
+                child.kill()
+            except Exception:
+                pass
 
         proc.terminate()
         proc.wait(2)
