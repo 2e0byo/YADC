@@ -81,15 +81,14 @@ class Scraper:
     def parse_timestr(timestr: str) -> datetime:
         return datetime.strptime(timestr, "%A %d %B %Y %I:%M%p")
 
-    @property
-    def logged_in(self) -> bool:
-        return self._logged_in and "queue" not in self._browser.current_url
+    def logged_in(self, browser) -> bool:
+        return self._logged_in and "queue" not in browser.current_url
 
     def login(self, browser: Chrome, driver: Driver):
-        if self.logged_in:
+        if self.logged_in(browser):
             return
 
-        browser.bypass() # TODO: use self._browser throughout
+        browser.bypass()
         if "queue" in browser.current_url:
             self._logger.info("Queuing...")
         while "queue" in browser.current_url:
