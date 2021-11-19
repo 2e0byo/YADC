@@ -4,7 +4,6 @@ from logging import getLogger
 from pathlib import Path
 from subprocess import PIPE, Popen
 from tempfile import TemporaryDirectory
-from time import sleep
 from fake_useragent import UserAgent
 
 import undetected_chromedriver as uc
@@ -12,7 +11,6 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 from .humanlike import randsleep
-from .utils import solve_captcha
 
 
 class BrowserError(Exception):
@@ -35,45 +33,47 @@ class CaptchaChrome(uc.Chrome):
         super().__init__(*args, **kwargs)
 
     def solve_captcha(self) -> bool:
-       self.switch_to.default_content()
-       iframe = self.find_element(value="main-iframe", bypass=False)
-       self.switch_to.frame(iframe)
-       iframe = self.find_element(
-           By.CSS_SELECTOR,
-           "iframe[name*='a-'][src*='https://www.google.com/recaptcha/api2/anchor?']",
-           bypass=False
-       )
-       self.switch_to.frame(iframe)
-       randsleep(0.2)
-       self.find_element(By.XPATH, "//span[@id='recaptcha-anchor']", bypass=False).click()
-       self.switch_to.default_content()
-       randsleep(0.2)
-       iframe = self.find_element(value="main-iframe", bypass=False)
-       self.switch_to.frame(iframe)
-       if "Why am I seeing this page" in self.page_source:
-           self._logger.info("Completing catpcha 1")
-           randsleep(0.2)
+        self.switch_to.default_content()
+        iframe = self.find_element(value="main-iframe", bypass=False)
+        self.switch_to.frame(iframe)
+        iframe = self.find_element(
+            By.CSS_SELECTOR,
+            "iframe[name*='a-'][src*='https://www.google.com/recaptcha/api2/anchor?']",
+            bypass=False,
+        )
+        self.switch_to.frame(iframe)
+        randsleep(0.2)
+        self.find_element(
+            By.XPATH, "//span[@id='recaptcha-anchor']", bypass=False
+        ).click()
+        self.switch_to.default_content()
+        randsleep(0.2)
+        iframe = self.find_element(value="main-iframe", bypass=False)
+        self.switch_to.frame(iframe)
+        if "Why am I seeing this page" in self.page_source:
+            self._logger.info("Completing catpcha 1")
+            randsleep(0.2)
 
-           iframe = self.find_element(
-               By.CSS_SELECTOR,
-               "iframe[title*='recaptcha challenge'][src*='https://www.google.com/recaptcha/api2/bframe?']",
-               bypass=False
-           )
-           self.switch_to.frame(iframe)
-           randsleep(0.2)
+            iframe = self.find_element(
+                By.CSS_SELECTOR,
+                "iframe[title*='recaptcha challenge'][src*='https://www.google.com/recaptcha/api2/bframe?']",
+                bypass=False,
+            )
+            self.switch_to.frame(iframe)
+            randsleep(0.2)
 
-           for _ in range(self.CAPTCHA_ATTEMPTS):
-               self._logger.info("Completing catpcha")
-               # let buster do it for us:
-               self.find_elements(By.CLASS_NAME, "help-button-holder")[0].click()
-               randsleep(5)
-               if "Multiple correct solutions required" not in self.page_source:
-                   break
+            for _ in range(self.CAPTCHA_ATTEMPTS):
+                self._logger.info("Completing catpcha")
+                # let buster do it for us:
+                self.find_elements(By.CLASS_NAME, "help-button-holder")[0].click()
+                randsleep(5)
+                if "Multiple correct solutions required" not in self.page_source:
+                    break
 
-           self.switch_to.default_content()
-           randsleep(0.5)
+            self.switch_to.default_content()
+            randsleep(0.5)
 
-       return "Why am I seeing this page" in self.page_source
+        return "Why am I seeing this page" in self.page_source
 
     def bypass(self):
         """Try to bypass security."""
@@ -88,7 +88,10 @@ class CaptchaChrome(uc.Chrome):
 
             for _ in range(2):
 
-                if self.INCAPSULA in self.page_source and "iframe" not in self.page_source:
+                if (
+                    self.INCAPSULA in self.page_source
+                    and "iframe" not in self.page_source
+                ):
                     randsleep(5)
                     self.refresh()
                 else:
@@ -117,7 +120,7 @@ class CaptchaChrome(uc.Chrome):
         if bypass:
             self.bypass()
         args = dict(by=by, value=value)
-        return super().find_element(**{k:v for k, v in args.items() if v})
+        return super().find_element(**{k: v for k, v in args.items() if v})
 
 
 class Browser:
