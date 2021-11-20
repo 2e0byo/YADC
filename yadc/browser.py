@@ -6,6 +6,7 @@ from subprocess import PIPE, Popen
 from tempfile import TemporaryDirectory
 from fake_useragent import UserAgent
 from psutil import Process
+from typing import Union
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -139,11 +140,11 @@ class Browser:
     def __init__(
         self,
         port: int = 8745,
-        buster: Path = None,
-        chrome: str = "google-chrome-stable",
-        chromedriver: str = "chromedriver",
+        buster: Union[Path, str] = None,
+        chrome: Union[Path, str] = "google-chrome-stable",
+        chromedriver: Union[Path, str] = "chromedriver",
         url: str = None,
-        errors_dir: Path = None,
+        errors_dir: Union[Path, str] = None,
         dump_on_error: bool = True,
     ):
         """Setup the Browser.
@@ -152,35 +153,41 @@ class Browser:
 
             port (int): the port to use for remote management.  (Default: 8745)
 
-            buster (Path): path to the unzipped buster extension.  If you don't
+            buster (Path | str): path to the unzipped buster extension.  If you don't
                            provide this, captchas will be unsolveable.
 
-            chrome (str): path to the Chrome executable on your system.
+            chrome (Path | str): path to the Chrome executable on your system.
 
-            chromedrive_path(str): path to the chromedriver executable on your system.
+            chromedrive_path(Path | str): path to the chromedriver executable on your system.
 
             url (str): the url to point the browser to, if not the default DVSA one.
 
-            errors_dir (Path): where to save errors.
+            errors_dir (Path | str): where to save errors.
 
             dump_on_error (bool): whether to save error dumps for debugging.
                                   (Default: True)
         """
         self._installed = False
         self._port = port
-        if buster and not buster.is_dir():
-            raise BrowserError("Please unzip buster and pass the dir.")
+        if buster:
+            buster = Path(buster)
+            if not buster.is_dir():
+                raise BrowserError("Please unzip buster and pass the dir.")
         self._buster = buster
         self._profile_dir = None
-        self._chrome = chrome
+        self._chrome = str(chrome)
         i = max(self.instances) + 1 if self.instances else 1
         self.instances.append(i)
         self.name = f"Browser-{i}"
         self._logger = getLogger(self.name)
         self._proc = None
-        self._chromedriver = chromedriver
+        self._chromedriver = str(chromedriver)
         self._url = url or self.URL
-        self._errors_dir = errors_dir or Path(f"./errors/{self.name}")
+        if errors_dir:
+            errors_dir = Path(errors_dir)
+            self._errors_dir = errors_dir
+        else:
+            self._errors_dir = Path(f"./errors/{self.name}")
         self.dump_on_error = dump_on_error
 
     @property
