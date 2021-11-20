@@ -326,6 +326,13 @@ class TorBrowser(Browser):
     PORT = "8897"
 
     def __init__(self, tor: Union[Path, str] = "tor", **kwargs):
+        """Setup the TorBrowser.
+
+        Args:
+            tor (Path | str): The `tor` executable to call.  (Default: tor)
+
+        See also the documentation for `Browser.__init__()`.
+        """
         super().__init__(**kwargs)
         self._tor = str(tor)
 
