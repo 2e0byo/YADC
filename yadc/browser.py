@@ -325,9 +325,9 @@ class TorBrowser(Browser):
 
     PORT = "8897"
 
-    def __init__(self, tor: str = "tor", **kwargs):
+    def __init__(self, tor: Union[Path, str] = "tor", **kwargs):
         super().__init__(**kwargs)
-        self._tor = tor
+        self._tor = str(tor)
 
     def start_tor(self):
         self._logger.info("Starting Tor")
