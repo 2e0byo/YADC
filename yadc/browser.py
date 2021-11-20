@@ -1,3 +1,4 @@
+import shlex
 import traceback as tb
 from datetime import datetime
 from logging import getLogger
@@ -175,13 +176,13 @@ class Browser:
                 raise BrowserError("Please unzip buster and pass the dir.")
         self._buster = buster
         self._profile_dir = None
-        self._chrome = str(chrome)
+        self._chrome = shlex.quote(str(chrome))
         i = max(self.instances) + 1 if self.instances else 1
         self.instances.append(i)
         self.name = f"Browser-{i}"
         self._logger = getLogger(self.name)
         self._proc = None
-        self._chromedriver = str(chromedriver)
+        self._chromedriver = shlex.quote(str(chromedriver))
         self._url = url or self.URL
         if errors_dir:
             errors_dir = Path(errors_dir)
@@ -334,7 +335,7 @@ class TorBrowser(Browser):
         See also the documentation for `Browser.__init__()`.
         """
         super().__init__(**kwargs)
-        self._tor = str(tor)
+        self._tor = shlex.quote(str(tor))
 
     def start_tor(self):
         self._logger.info("Starting Tor")
