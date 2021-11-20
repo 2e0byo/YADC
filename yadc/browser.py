@@ -5,10 +5,10 @@ from logging import getLogger
 from pathlib import Path
 from subprocess import PIPE, Popen
 from tempfile import TemporaryDirectory
-from fake_useragent import UserAgent
-from psutil import Process
 from typing import Union
 
+from fake_useragent import UserAgent
+from psutil import Process
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
