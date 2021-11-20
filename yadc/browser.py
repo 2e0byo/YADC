@@ -194,7 +194,7 @@ class Browser:
     @property
     def buster_arg(self) -> str:
         if self._buster:
-            return f"--load-extension={self._buster}"
+            return f"--load-extension={shlex.quote(str(self._buster))}"
         else:
             return ""
 
