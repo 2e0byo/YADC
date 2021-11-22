@@ -1,0 +1,26 @@
+name: tests
+on:
+  push:
+  workflow-dispatch:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            INSTALL: brew install tor
+
+          - os: ubuntu-latest
+            INSTALL: apt-get install -y tor
+
+          - os: windows-latest
+            INSTALL: python scripts/download_tor.py
+    steps:
+      - uses: actions/checkout@v1
+      - run: ${{matrix.INSTALL}}
+      - run: pytest
+
+
+
