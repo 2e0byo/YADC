@@ -82,7 +82,11 @@ class Scraper:
         return datetime.strptime(timestr, "%A %d %B %Y %I:%M%p")
 
     def logged_in(self, browser) -> bool:
-        return self._logged_in and "queue" not in browser.current_url and "/login" not in browser.page_source
+        return (
+            self._logged_in
+            and "queue" not in browser.current_url
+            and "/login" not in browser.page_source
+        )
 
     def login(self, browser: Chrome, driver: Driver):
         if self.logged_in(browser):
@@ -238,7 +242,7 @@ class Scraper:
                 self._logger.info("Website not currently available; sleeping.")
 
             while self.dvsa_disabled():
-                randsleep(60) # has spinner
+                randsleep(60)  # has spinner
 
             printed = False
             errs = deque([], maxlen=5)
@@ -252,7 +256,7 @@ class Scraper:
             except Exception as e:
                 errs.append(monotonic())
                 self._logger.exception(e)
-                randsleep(30) # try not to be too predictable
+                randsleep(30)  # try not to be too predictable
 
             if len(errs) == 5 and errs[-1] - errs[0] < 10 * 60:
                 msg = (
