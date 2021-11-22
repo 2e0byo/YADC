@@ -17,7 +17,7 @@ jobs:
             INSTALL: brew install tor
 
           - os: ubuntu-latest
-            INSTALL: apt-get install -y tor
+            INSTALL: sudo apt-get install -y tor
 
           - os: windows-latest
             INSTALL: python scripts/download_tor.py
