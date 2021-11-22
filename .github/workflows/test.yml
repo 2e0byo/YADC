@@ -3,10 +3,15 @@ on:
   push:
   workflow_dispatch:
 
+
 jobs:
   test:
+    defaults:
+      run:
+        shell: bash
     strategy:
       matrix:
+        os: ["macos-latest", "ubuntu-latest", "windows-latest"]
         include:
           - os: macos-latest
             INSTALL: brew install tor
@@ -53,7 +58,7 @@ jobs:
 
       - name: Run tests
         run: |
-          source .venv/bin/activate
+          source "VENV
           pytest tests/
 
 
