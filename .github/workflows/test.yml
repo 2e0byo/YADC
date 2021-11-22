@@ -17,7 +17,7 @@ jobs:
           - os: windows-latest
             INSTALL: python scripts/download_tor.py
 
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.9", "3.10"]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Check out repo
