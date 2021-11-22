@@ -14,4 +14,4 @@ def test_randsleep(s, mocker):
 
     mocker.patch("yadc.humanlike.sleep", mock_sleep)
     randsleep(s)
-    assert abs(slept - s) < s / 5
+    assert abs(slept - s) < s

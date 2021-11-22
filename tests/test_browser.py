@@ -32,7 +32,7 @@ def tor():
     return executable_path("tor", "TOR/tor.exe")
 
 
-def smoke_test_browser():
+def test_browser():
     with Browser() as driver:
         assert any(
             (
