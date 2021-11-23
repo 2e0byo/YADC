@@ -363,7 +363,7 @@ class TorBrowser(Browser):
     def launch_chrome(self):
         self.start_tor()
         tor_args = [
-            f'--proxy-server="socks4://localhost:{self.port}"',
+            f'--proxy-server="socks4://localhost:{self.tor_port}"',
             # disable prefetch, as for some reason it's not proxied (?!)
             "--dns-prefetch-disable"
             # apparently this should be more resilient than merely disabling prefetch
