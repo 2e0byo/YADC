@@ -1,4 +1,5 @@
 import shlex
+import socketserver
 import traceback as tb
 from datetime import datetime
 from logging import getLogger
@@ -140,7 +141,7 @@ class Browser:
 
     def __init__(
         self,
-        port: int = 8745,
+        port: int = None,
         buster: Union[Path, str] = None,
         chrome: Union[Path, str] = "google-chrome-stable",
         chromedriver: Union[Path, str] = "chromedriver",
@@ -192,9 +193,16 @@ class Browser:
         self.dump_on_error = dump_on_error
 
     @property
+    def port(self) -> int:
+        if not self._port:
+            with socketserver.TCPServer(("localhost", 0), None) as s:
+                self._port = s.server_address[1]
+        return self._port
+
+    @property
     def buster_arg(self) -> str:
         if self._buster:
-            return f"--load-extension={shlex.quote(str(self._buster))}"
+            return f'--load-extension="{self._buster}"'
         else:
             return ""
 
@@ -206,7 +214,7 @@ class Browser:
 
     @property
     def port_arg(self) -> str:
-        return f"--remote-debugging-port={self._port}"
+        return f"--remote-debugging-port={self.port}"
 
     def kill(self, proc, name):
         self._logger.info(f"Killing {name}")
