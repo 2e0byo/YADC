@@ -1,4 +1,3 @@
-import shlex
 import socketserver
 import traceback as tb
 from datetime import datetime
@@ -177,13 +176,13 @@ class Browser:
                 raise BrowserError("Please unzip buster and pass the dir.")
         self._buster = buster
         self._profile_dir = None
-        self._chrome = shlex.quote(str(chrome))
+        self._chrome = f'"{chrome}"'
         i = max(self.instances) + 1 if self.instances else 1
         self.instances.append(i)
         self.name = f"Browser-{i}"
         self._logger = getLogger(self.name)
         self._proc = None
-        self._chromedriver = shlex.quote(str(chromedriver))
+        self._chromedriver = chromedriver
         self._url = url or self.URL
         if errors_dir:
             errors_dir = Path(errors_dir)
@@ -297,7 +296,7 @@ class Browser:
 
     def _dump(self, *err):
         self._errors_dir.mkdir(parents=True, exist_ok=True)
-        outf = self._errors_dir / f"error-{datetime.now()}.txt"
+        outf = self._errors_dir / f"error-{str(datetime.now()).replace(' ', '_')}.txt"
         with outf.open("w") as f:
             f.write("".join(tb.format_exception(*err)))
             f.write("\n")
@@ -316,7 +315,10 @@ class Browser:
                 tb.print_exc()
 
         self.kill(self._proc, "Chrome")
-        self._profile_dir.cleanup()
+        try:
+            self._profile_dir.cleanup()
+        except Exception as e:
+            self._logger.exception(e)
         return False if exc_val else None
 
 
@@ -343,7 +345,7 @@ class TorBrowser(Browser):
         See also the documentation for `Browser.__init__()`.
         """
         super().__init__(**kwargs)
-        self._tor = shlex.quote(str(tor))
+        self._tor = Path(tor)
 
     def start_tor(self):
         self._logger.info("Starting Tor")
