@@ -334,9 +334,7 @@ class TorBrowser(Browser):
     blocked.
     """
 
-    PORT = "8897"
-
-    def __init__(self, tor: Union[Path, str] = "tor", **kwargs):
+    def __init__(self, tor: Union[Path, str] = "tor", tor_port: int = None, **kwargs):
         """Setup the TorBrowser.
 
         Args:
@@ -346,10 +344,18 @@ class TorBrowser(Browser):
         """
         super().__init__(**kwargs)
         self._tor = Path(tor)
+        self._tor_port = tor_port
+
+    @property
+    def tor_port(self) -> int:
+        if not self._tor_port:
+            with socketserver.TCPServer(("localhost", 0), None) as s:
+                self._tor_port = s.server_address[1]
+        return self._tor_port
 
     def start_tor(self):
         self._logger.info("Starting Tor")
-        cmd = [self._tor, "--SocksPort", self.PORT]
+        cmd = [self._tor, "--SocksPort", self.tor_port]
         proc = Popen(cmd, stdout=PIPE, encoding="utf8")
         self._tor_proc = proc
         self._logger.info("Started Tor")
