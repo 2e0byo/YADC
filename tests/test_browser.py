@@ -19,7 +19,13 @@ def executable_path(*tries):
 
 @pytest.fixture
 def chrome():
-    return executable_path("chrome", "chromium", "google-chrome-stable", "chrome.exe")
+    return executable_path(
+        "chrome",
+        "chromium",
+        "google-chrome-stable",
+        "chrome.exe",
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+    )
 
 
 @pytest.fixture
@@ -29,7 +35,7 @@ def chromedriver():
 
 @pytest.fixture
 def tor():
-    return executable_path("tor", "TOR/tor.exe")
+    return executable_path("tor", "Tor/tor.exe")
 
 
 def test_browser():
