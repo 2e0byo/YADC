@@ -1,4 +1,5 @@
 import datetime as dt
+import warnings
 from collections import deque
 from datetime import datetime
 from logging import getLogger
@@ -44,6 +45,10 @@ class ScraperError(Exception):
     pass
 
 
+class BookingError(ScraperError):
+    pass
+
+
 class LoginError(Exception):
     pass
 
@@ -52,7 +57,12 @@ class Scraper:
     instances = []
 
     def __init__(
-        self, browser: Browser, drivers: list[Driver], notify: Callable = None
+        self,
+        browser: Browser,
+        drivers: list[Driver],
+        notify: Callable = None,
+        reserve: bool = True,
+        short_notice: bool = True,
     ):
         self._browser = browser
         self.notify = notify or print
@@ -64,6 +74,8 @@ class Scraper:
         for driver in self.drivers:
             driver.refresh_urls = {}
         self._logged_in = False
+        self.reserve = reserve
+        self.short_notice = short_notice
 
     @staticmethod
     def dvsa_disabled():
@@ -202,13 +214,91 @@ class Scraper:
             return back
 
         self.notify(f"Test found at {centre} on {day}")
+        if self.reserve:
+            slot = self._reserve_test(browser, day, el):
+            if slot:
+                self.logger.info(f"Reserved test: {slot}")
+            else:
+                self.logger.info("Failed to reserve test...")
+                return back
+
         input("Press enter to continue")
         return back
 
-        # could improve here:
-        # scroll to the right calendar month
-        # click
-        # reserve test
+    @staticmethod
+    def correct_month_showing(browser: Chrome, day: datetime):
+        el = browser.find_element(By.CLASS_NAME, "BookingCalendar-currentMonth")
+        return day.strftime("%B") in el.get_attribute("innerHTML")
+
+    def _reserve_test(self, browser: Chrome, day: datetime, el) -> bool:
+        """Reserve a test.  **UNTESTED**"""
+        warnings.warn(
+            "Attempting to reserve test: code untested.  YMMV!", RuntimeWarning
+        )
+
+        # scroll to correct month
+        attempts = 0
+        while not self.correct_month_showing(browser, day):
+            browser.find_element(By.CLASS_NAME, "BookingCalendar-nav--prev").click()
+            attempts += 1
+            if attempts > 12:
+                raise BookingError("Failed to find correct month.")
+
+        # click on date.
+        el.click()
+        # get container
+        time_container = browser.find_element(By.ID, f"date-{day.strftime('%Y-%m-%d')}")
+        label = time_container.find_element(By.XPATH, ".//label")
+        # get time
+        time_ms = int(label.get_attribute("for").replace("slot-", ""))
+        time = datetime.fromtimestamp(hms_ms / 1000).time()
+        test_slot = datetime.combine(day.date(), time)
+
+        # check if short_notice
+        short_notice = (
+            label.get_attribute("for").get_attribute("data-short-notice") == "true"
+        )
+        # add error handling here if required.
+
+        # click on label
+        label.click()
+        randsleep(0.1)
+
+        # click on time container
+        time_container.click()
+        randsleep(0.1)
+
+        # go for it
+        driver.find_element_by_id("slot-chosen-submit").click()
+        randsleep(0.1)
+
+        # dismiss warning
+        if short_notice:
+            if self.short_notice:
+                browser.find_element(
+                    By.XPATH, "(//button[@id='slot-warning-continue'])[2]"
+                ).click()
+            else:
+                self.logger.info("Skipping test as short notice.")
+                return None
+        else:
+            browser.find_element_by_id("slot-warning-continue").click()
+
+        randsleep(0.3)
+
+        # this is wrapped in a loop in the original code.  I'm not sure what those multiple attempts are for.
+
+        # we are the candidate
+        browser.find_element(By.ID, "i-am-candidate").click()
+        randsleep(0.1)
+
+        # we make no manual attempt to solve the captcha here.  It might be
+        # solved for us by the Browser().
+        if "no longer available" in browser.page_source:
+            self.logger.info("Missed it: someone else got there first...")
+            return False
+
+        return test_slot
 
     def _scan_for_test(self, browser: Chrome, driver: Driver, centre: Centre):
         cal = browser.find_element(By.CLASS_NAME, "BookingCalendar-datesBody")
