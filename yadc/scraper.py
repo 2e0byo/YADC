@@ -78,6 +78,7 @@ class Scraper:
         self.short_notice = short_notice
         self.period = 5
         self.error_period = 30
+        self._search_counter = 0
 
     @staticmethod
     def dvsa_disabled():
@@ -188,7 +189,12 @@ class Scraper:
         return centre.get_attribute("href")
 
     def find_next_available(self, browser: Chrome, driver: Driver, centre: Centre):
-        self._logger.info(f"Trying centre {centre.centre}")
+        # try to avoid hitting search limit for day
+        randsleep(18)
+        self._search_counter += 1
+        self._logger.info(
+            f"Search {self._search_counter}: Trying centre {centre.centre}"
+        )
         if centre.centre == driver.current_test.centre:
             back = 2
             browser.find_element(value="date-time-change").click()
@@ -215,6 +221,7 @@ class Scraper:
                 "in the queue",
                 "Incapsula incident",
                 "Enter details below",
+                "Search limit reached",
             )
         ):
             browser.bypass()  # is this needed now we handle on getting?
