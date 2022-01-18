@@ -208,8 +208,6 @@ class Scraper:
             randsleep(1)
 
         page = browser.page_source
-        with open("/tmp/test.html", "w") as f:
-            f.write(page)
         if any(
             x in page
             for x in (
