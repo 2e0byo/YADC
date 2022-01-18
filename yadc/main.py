@@ -12,7 +12,8 @@ coloredlogs.install()
 
 def notify(msg):
     """Put notification code here."""
-    pass
+    print(msg)
+    play_loud_aler_sound()
 
 
 # define a driver.  You can define as many as you like.
