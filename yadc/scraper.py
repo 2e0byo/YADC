@@ -140,19 +140,34 @@ class Scraper:
         contents_container = browser.find_elements(By.CLASS_NAME, "contents")
         if not contents_container:
             raise ScraperError("Failed to find contents container.")
-        date = self.parse_timestr(
+
+        current_test_date = self.parse_timestr(
             contents_container[0]
             .find_element(By.XPATH, ".//dd")
             .get_attribute("innerHTML")
         )
-        centre = (
+
+        current_centre = (
             contents_container[1]
             .find_element(By.XPATH, ".//dd")
             .get_attribute("innerHTML")
         )
-        driver.current_test = Test(date=date, centre=centre)
+
+        driver.current_test = Test(date=current_test_date, centre=current_centre)
+
+        self._logger.debug(
+            f"Current Booking for {driver.client_name_booked} is on "
+            f"{current_test_date} in {current_centre}"
+        )
+        self._logger.debug(
+            f"Looking for dates for {driver.client_name_search} between "
+            f"{driver.not_before} and {driver.not_after}"
+        )
         for centre in driver.centres:
+            # wait for a bit so we don't look too automated.
             randsleep(1.5)
+
+            # go back until we're at the starting screen.
             depth = self.find_next_available(browser, driver, centre)
             for _ in range(depth):
                 browser.back()
