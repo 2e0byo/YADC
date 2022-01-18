@@ -232,12 +232,9 @@ class Scraper:
         if self.reserve:
             slot = self._reserve_test(browser, day, el):
             if slot:
-                self.logger.info(f"Reserved test: {slot}")
+                self._logger.info(f"Reserved test: {slot}")
             else:
-                self.logger.info("Failed to reserve test...")
-                return back
-
-        input("Press enter to continue")
+                self._logger.info("Failed to reserve test...")
         return back
 
     @staticmethod
@@ -294,7 +291,7 @@ class Scraper:
                     By.XPATH, "(//button[@id='slot-warning-continue'])[2]"
                 ).click()
             else:
-                self.logger.info("Skipping test as short notice.")
+                self._logger.info("Skipping test as short notice.")
                 return None
         else:
             browser.find_element_by_id("slot-warning-continue").click()
@@ -310,7 +307,7 @@ class Scraper:
         # we make no manual attempt to solve the captcha here.  It might be
         # solved for us by the Browser().
         if "no longer available" in browser.page_source:
-            self.logger.info("Missed it: someone else got there first...")
+            self._logger.info("Missed it: someone else got there first...")
             return False
 
         return test_slot
