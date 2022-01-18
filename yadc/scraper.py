@@ -237,7 +237,7 @@ class Scraper:
 
         self.notify(f"Test found at {centre} on {day}")
         if self.reserve:
-            slot = self._reserve_test(browser, day, el):
+            slot = self._reserve_test(browser, day, el)
             if slot:
                 self._logger.info(f"Reserved test: {slot}")
             else:
