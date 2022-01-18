@@ -270,7 +270,7 @@ class Scraper:
         label = time_container.find_element(By.XPATH, ".//label")
         # get time
         time_ms = int(label.get_attribute("for").replace("slot-", ""))
-        time = datetime.fromtimestamp(hms_ms / 1000).time()
+        time = datetime.fromtimestamp(time_ms / 1000).time()
         test_slot = datetime.combine(day.date(), time)
 
         # check if short_notice
