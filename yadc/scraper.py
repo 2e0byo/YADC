@@ -242,6 +242,8 @@ class Scraper:
                 self._logger.info(f"Reserved test: {slot}")
             else:
                 self._logger.info("Failed to reserve test...")
+        else:
+            input("Deal with test; press enter when done.")
         return back
 
     @staticmethod
