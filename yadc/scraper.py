@@ -305,13 +305,14 @@ class Scraper:
         else:
             browser.find_element_by_id("slot-warning-continue").click()
 
-        randsleep(0.3)
+        randsleep(5)
 
         # this is wrapped in a loop in the original code.  I'm not sure what those multiple attempts are for.
 
+        randsleep(3)
         # we are the candidate
         browser.find_element(By.ID, "i-am-candidate").click()
-        randsleep(0.1)
+        randsleep(1)
 
         # we make no manual attempt to solve the captcha here.  It might be
         # solved for us by the Browser().
