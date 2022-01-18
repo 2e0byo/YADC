@@ -333,7 +333,7 @@ class Scraper:
 
             # note that we cannot find multiple tests on the same day
             # this could be fixed, quite easily
-            before_date = centre.date or driver.current_test.date
+            before_date = driver.current_test.date or centre.date
             if date.date() >= before_date.date():
                 continue
             if driver.disabled_dates and date in driver.disabled_dates:
