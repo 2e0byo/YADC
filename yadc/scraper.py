@@ -76,6 +76,8 @@ class Scraper:
         self._logged_in = False
         self.reserve = reserve
         self.short_notice = short_notice
+        self.period = 5
+        self.error_period = 30
 
     @staticmethod
     def dvsa_disabled():
@@ -357,11 +359,11 @@ class Scraper:
                     while True:
                         for driver in self.drivers:
                             self.find_tests(browser, driver)
-                            randsleep(5 * 60)
+                            randsleep(self.period * 60)
             except Exception as e:
                 errs.append(monotonic())
                 self._logger.exception(e)
-                randsleep(30)  # try not to be too predictable
+                randsleep(self.error_period)
 
             if len(errs) == 5 and errs[-1] - errs[0] < 10 * 60:
                 msg = (
