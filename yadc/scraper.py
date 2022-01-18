@@ -32,6 +32,7 @@ class Centre(BaseModel):
 class Driver(BaseModel):
     "A driver seeking a driving test."
     licence_number: str
+    name: str
     booking_ref: str
     centres: list[Centre]
     not_before: datetime
@@ -159,11 +160,11 @@ class Scraper:
         driver.current_test = Test(date=current_test_date, centre=current_centre)
 
         self._logger.debug(
-            f"Current Booking for {driver.client_name_booked} is on "
+            f"Current Booking for {driver.name} is on "
             f"{current_test_date} in {current_centre}"
         )
         self._logger.debug(
-            f"Looking for dates for {driver.client_name_search} between "
+            f"Looking for dates for {driver.name} between "
             f"{driver.not_before} and {driver.not_after}"
         )
         for centre in driver.centres:
