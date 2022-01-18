@@ -237,7 +237,7 @@ class Scraper:
 
         self.notify(f"Test found at {centre} on {day}")
         if self.reserve:
-            slot = self._reserve_test(browser, day, el)
+            slot = self._reserve_test(browser, day, centre, el)
             if slot:
                 self._logger.info(f"Reserved test: {slot}")
             else:
@@ -251,7 +251,7 @@ class Scraper:
         el = browser.find_element(By.CLASS_NAME, "BookingCalendar-currentMonth")
         return day.strftime("%B") in el.get_attribute("innerHTML")
 
-    def _reserve_test(self, browser: Chrome, day: datetime, el) -> bool:
+    def _reserve_test(self, browser: Chrome, day: datetime, centre: str, el) -> bool:
         """Reserve a test.  **UNTESTED**"""
         warnings.warn(
             "Attempting to reserve test: code untested.  YMMV!", RuntimeWarning
@@ -274,24 +274,29 @@ class Scraper:
         time_ms = int(label.get_attribute("for").replace("slot-", ""))
         time = datetime.fromtimestamp(time_ms / 1000).time()
         test_slot = datetime.combine(day.date(), time)
+        self._logger.info(f"earliest availabe slot is ", test_slot)
 
         # check if short_notice
-        short_notice = (
-            label.get_attribute("for").get_attribute("data-short-notice") == "true"
-        )
+        try:
+            short_notice = (
+                label.get_attribute("for").get_attribute("data-short-notice") == "true"
+            )
+        except Exception:
+            short_notice = False
+
         # add error handling here if required.
-
-        # click on label
-        label.click()
-        randsleep(0.1)
-
-        # click on time container
-        time_container.click()
-        randsleep(0.1)
-
-        # go for it
-        driver.find_element_by_id("slot-chosen-submit").click()
-        randsleep(0.1)
+        randsleep(1)
+        # click on time box
+        first_available_time = time_container.find_element(By.XPATH, "./label")
+        randsleep(1)
+        first_available_time.click()
+        randsleep(1)
+        # click on continue button
+        continue_button = browser.find_element(By.ID, "slot-chosen-submit")
+        randsleep(1)
+        continue_button.click()
+        # label.click()
+        randsleep(1)
 
         # dismiss warning
         if short_notice:
@@ -303,10 +308,14 @@ class Scraper:
                 self._logger.info("Skipping test as short notice.")
                 return None
         else:
-            browser.find_element_by_id("slot-warning-continue").click()
-
+            # click submit button
+            slot_warning_continue_button = browser.find_element(
+                By.ID, "slot-warning-continue"
+            )
+            slot_warning_continue_button.click()
         randsleep(5)
 
+        self._logger.info("15 min timer started, releases in about 16.5 min ")
         # this is wrapped in a loop in the original code.  I'm not sure what those multiple attempts are for.
 
         randsleep(3)
@@ -319,7 +328,30 @@ class Scraper:
         if "no longer available" in browser.page_source:
             self._logger.info("Missed it: someone else got there first...")
             return False
+        self.notify(f"A Driving test has been reserved on {test_slot} in {centre}.")
 
+        # start of new hold loop
+        # sleep for long time while dvsa release back to pool
+        sleep(950)
+        randsleep(15)
+
+        # find and click abandon button
+        abandon_button = browser.find_element(By.ID, "abandon")
+        randsleep(1)
+        abandon_button.click()
+        # TODO add explicit wait until clickable, something like
+        # element = WebDriverWait(driver, 10).until \
+        #     (EC.element_to_be_clickable((By.ID, "test-centre-change")))
+        # driver.find_element_by_id("test-centre-change").click()
+
+        randsleep(2)
+        # find and click abandon change button
+        abandon_changes_button = browser.find_element(By.ID, "abandon-changes")
+        randsleep(1)
+        abandon_changes_button.click()
+        randsleep(1)
+        self._logger.info("Released test.")
+        randsleep(2)
         return test_slot
 
     def _scan_for_test(self, browser: Chrome, driver: Driver, centre: Centre):
