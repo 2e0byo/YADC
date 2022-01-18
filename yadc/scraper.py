@@ -170,8 +170,8 @@ class Scraper:
             # go back until we're at the starting screen.
             depth = self.find_next_available(browser, driver, centre)
             for _ in range(depth):
-                browser.back()
                 randsleep(0.5)
+                browser.back()
 
     def get_centre_url(self, browser, centre):
         browser.find_element(value="test-centre-change").click()
