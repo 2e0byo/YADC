@@ -300,11 +300,19 @@ class Browser:
         with outf.open("w") as f:
             f.write("".join(tb.format_exception(*err)))
             f.write("\n")
-            f.write("Whilst visiting:")
-            f.write(self._driver.current_url)
-        with outf.with_suffix(".html").open("w") as f:
-            f.write(self._driver.page_source)
-        self._driver.save_screenshot(str(outf.with_suffix(".png")))
+            try:
+                f.write("Whilst visiting:")
+                f.write(self._driver.current_url)
+            except AttributeError:
+                pass
+
+        try:
+            with outf.with_suffix(".html").open("w") as f:
+                f.write(self._driver.page_source)
+            self._driver.save_screenshot(str(outf.with_suffix(".png")))
+        except AttributeError:
+            pass
+
         self._logger.info(f"Saved error dump in {outf}")
 
     def __exit__(self, exc_type, exc_val, exc_tb):
