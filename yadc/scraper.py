@@ -11,7 +11,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
 from .browser import Browser, BrowserError
-from .humanlike import randsleep
+from .humanlike import randsleep, spinner_sleep
 from .utils import solve_captcha
 
 
@@ -333,7 +333,7 @@ class Scraper:
 
         # start of new hold loop
         # sleep for long time while dvsa release back to pool
-        sleep(950)
+        spinner_sleep(950)
         randsleep(15)
 
         # find and click abandon button
