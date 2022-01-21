@@ -297,11 +297,11 @@ class Browser:
     @staticmethod
     def _errorfn(now: datetime = None, suffix: str = "txt"):
         now = now or datetime.now()
-        return f"error-{now.strftime('%Y-%m-%d_%H-%M-%S')}.{suffix}"
+        return Path(f"error-{now.strftime('%Y-%m-%d_%H-%M-%S')}.{suffix}")
 
     def _dump(self, *err):
         self._errors_dir.mkdir(parents=True, exist_ok=True)
-        outf = self._errors_dir / f"error-{str(datetime.now()).replace(' ', '_')}.txt"
+        outf = self._errors_dir / self._errorfn()
         with outf.open("w") as f:
             f.write("".join(tb.format_exception(*err)))
             f.write("\n")
