@@ -11,6 +11,7 @@ from fake_useragent import UserAgent
 from psutil import Process
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from slugify import slugify
 
 from .humanlike import randsleep
 
@@ -293,6 +294,11 @@ class Browser:
         driver.refresh()
         self._driver = driver
         return driver
+
+    @staticmethod
+    def _errorfn(now: datetime = None, suffix: str = "txt"):
+        now = now or datetime.now()
+        return f"error-{slugify(now)}.{suffix}"
 
     def _dump(self, *err):
         self._errors_dir.mkdir(parents=True, exist_ok=True)
