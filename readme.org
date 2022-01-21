@@ -31,8 +31,7 @@ YADC is yet another checker for driving cancellations in the UK.
     the ground up.  I got the idea of the poisson sleep from [[https://github.com/birdcolour/dvsa-practicals][this repo]], although
     I didn't take any code directly from anything.
   - infallible
-  - capable of booking tests for you  (This could be added, but there are
-    currently no tests to practice on...)
+  - capable of booking tests for you (thanks to @chrishat34 it will reserve them, though).
   - always going to work
   - properly supported
 

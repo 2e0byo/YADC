@@ -17,6 +17,7 @@ def notify(msg):
 
 
 # define a driver.  You can define as many as you like.
+# note that the code will only search for one driver at a time.
 driver = Driver(
     licence_number="YOUR_NUMBER",
     booking_ref="YOUR_REF",
@@ -31,7 +32,13 @@ driver = Driver(
 
 # get a scraper for a driver or drivers.
 s = Scraper(
-    TorBrowser(buster=Path("buster"), chrome="chromium"), [driver], notify=notify
+    TorBrowser(
+        buster=Path("buster"),
+        chrome="chromium",
+    ),
+    [driver],
+    notify=notify,
+    reserve=True,  # reserve a test if we find it
 )
 
 # run the scraper.  I'm a bit too addicted to callable objects...
