@@ -43,9 +43,9 @@ def run_test_browser(b):
         assert driver.page_source
 
 
-def test_paths_chrome_chromedriver(chrome, chromedriver):
+def test_paths_chrome_chromedriver_graphical(chrome, chromedriver):
     run_test_browser(Browser(chrome=chrome, chromedriver=chromedriver))
 
 
-def test_paths_tor_browser(chrome, chromedriver, tor):
+def test_paths_tor_browser_graphical(chrome, chromedriver, tor):
     run_test_browser(TorBrowser(chrome=chrome, chromedriver=chromedriver, tor=tor))

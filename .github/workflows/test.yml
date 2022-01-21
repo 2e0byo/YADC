@@ -61,7 +61,7 @@ jobs:
       - name: Run tests
         run: |
           source $VENV
-          pytest tests/
+          pytest tests/ -k 'not graphical'
 
 
 
