@@ -7,6 +7,11 @@ from halo import Halo
 logger = getLogger(__name__)
 
 
+def spinner_sleep(*args, **kwargs):
+    with Halo(spinner="dots"):
+        sleep(*args, **kwargs)
+
+
 def randsleep(target: int, max_: int = None):
     """Sleep for a random length of time around target but less than max.
 
@@ -23,7 +28,6 @@ def randsleep(target: int, max_: int = None):
     logger.debug(f"Sleeping for {duration/multiplier} s")
     duration /= multiplier
     if duration > 10:
-        with Halo(spinner="dots"):
-            sleep(duration)
+        spinner_sleep(duration)
     else:
         sleep(duration)

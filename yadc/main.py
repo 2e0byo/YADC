@@ -12,7 +12,8 @@ coloredlogs.install()
 
 def notify(msg):
     """Put notification code here."""
-    pass
+    print(msg)
+    play_loud_aler_sound()
 
 
 # define a driver.  You can define as many as you like.
@@ -21,6 +22,7 @@ driver = Driver(
     booking_ref="YOUR_REF",
     not_before=datetime(2021, 12, 10),
     not_after=datetime(2022, 3, 1),
+    name="",
     centres=[
         Centre(centre="Gateshead", before=datetime(2022, 1, 1)),
         Centre(centre="Durham"),

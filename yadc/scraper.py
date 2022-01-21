@@ -1,4 +1,5 @@
 import datetime as dt
+import warnings
 from collections import deque
 from datetime import datetime
 from logging import getLogger
@@ -10,7 +11,7 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 
 from .browser import Browser, BrowserError
-from .humanlike import randsleep
+from .humanlike import randsleep, spinner_sleep
 from .utils import solve_captcha
 
 
@@ -31,6 +32,7 @@ class Centre(BaseModel):
 class Driver(BaseModel):
     "A driver seeking a driving test."
     licence_number: str
+    name: str
     booking_ref: str
     centres: list[Centre]
     not_before: datetime
@@ -44,6 +46,10 @@ class ScraperError(Exception):
     pass
 
 
+class BookingError(ScraperError):
+    pass
+
+
 class LoginError(Exception):
     pass
 
@@ -52,7 +58,12 @@ class Scraper:
     instances = []
 
     def __init__(
-        self, browser: Browser, drivers: list[Driver], notify: Callable = None
+        self,
+        browser: Browser,
+        drivers: list[Driver],
+        notify: Callable = None,
+        reserve: bool = True,
+        short_notice: bool = True,
     ):
         self._browser = browser
         self.notify = notify or print
@@ -64,6 +75,11 @@ class Scraper:
         for driver in self.drivers:
             driver.refresh_urls = {}
         self._logged_in = False
+        self.reserve = reserve
+        self.short_notice = short_notice
+        self.period = 5
+        self.error_period = 30
+        self._search_counter = 0
 
     @staticmethod
     def dvsa_disabled():
@@ -128,23 +144,38 @@ class Scraper:
         contents_container = browser.find_elements(By.CLASS_NAME, "contents")
         if not contents_container:
             raise ScraperError("Failed to find contents container.")
-        date = self.parse_timestr(
+
+        current_test_date = self.parse_timestr(
             contents_container[0]
             .find_element(By.XPATH, ".//dd")
             .get_attribute("innerHTML")
         )
-        centre = (
+
+        current_centre = (
             contents_container[1]
             .find_element(By.XPATH, ".//dd")
             .get_attribute("innerHTML")
         )
-        driver.current_test = Test(date=date, centre=centre)
+
+        driver.current_test = Test(date=current_test_date, centre=current_centre)
+
+        self._logger.debug(
+            f"Current Booking for {driver.name} is on "
+            f"{current_test_date} in {current_centre}"
+        )
+        self._logger.debug(
+            f"Looking for dates for {driver.name} between "
+            f"{driver.not_before} and {driver.not_after}"
+        )
         for centre in driver.centres:
+            # wait for a bit so we don't look too automated.
             randsleep(1.5)
+
+            # go back until we're at the starting screen.
             depth = self.find_next_available(browser, driver, centre)
             for _ in range(depth):
-                browser.back()
                 randsleep(0.5)
+                browser.back()
 
     def get_centre_url(self, browser, centre):
         browser.find_element(value="test-centre-change").click()
@@ -159,7 +190,12 @@ class Scraper:
         return centre.get_attribute("href")
 
     def find_next_available(self, browser: Chrome, driver: Driver, centre: Centre):
-        self._logger.info(f"Trying centre {centre.centre}")
+        # try to avoid hitting search limit for day
+        randsleep(18)
+        self._search_counter += 1
+        self._logger.info(
+            f"Search {self._search_counter}: Trying centre {centre.centre}"
+        )
         if centre.centre == driver.current_test.centre:
             back = 2
             browser.find_element(value="date-time-change").click()
@@ -179,8 +215,6 @@ class Scraper:
             randsleep(1)
 
         page = browser.page_source
-        with open("/tmp/test.html", "w") as f:
-            f.write(page)
         if any(
             x in page
             for x in (
@@ -188,6 +222,7 @@ class Scraper:
                 "in the queue",
                 "Incapsula incident",
                 "Enter details below",
+                "Search limit reached",
             )
         ):
             browser.bypass()  # is this needed now we handle on getting?
@@ -202,13 +237,123 @@ class Scraper:
             return back
 
         self.notify(f"Test found at {centre} on {day}")
-        input("Press enter to continue")
+        if self.reserve:
+            slot = self._reserve_test(browser, day, centre, el)
+            if slot:
+                self._logger.info(f"Reserved test: {slot}")
+            else:
+                self._logger.info("Failed to reserve test...")
+        else:
+            input("Deal with test; press enter when done.")
         return back
 
-        # could improve here:
-        # scroll to the right calendar month
-        # click
-        # reserve test
+    @staticmethod
+    def correct_month_showing(browser: Chrome, day: datetime):
+        el = browser.find_element(By.CLASS_NAME, "BookingCalendar-currentMonth")
+        return day.strftime("%B") in el.get_attribute("innerHTML")
+
+    def _reserve_test(self, browser: Chrome, day: datetime, centre: str, el) -> bool:
+        """Reserve a test.  **UNTESTED**"""
+        warnings.warn(
+            "Attempting to reserve test: code untested.  YMMV!", RuntimeWarning
+        )
+
+        # scroll to correct month
+        attempts = 0
+        while not self.correct_month_showing(browser, day):
+            browser.find_element(By.CLASS_NAME, "BookingCalendar-nav--prev").click()
+            attempts += 1
+            if attempts > 12:
+                raise BookingError("Failed to find correct month.")
+
+        # click on date.
+        el.click()
+        # get container
+        time_container = browser.find_element(By.ID, f"date-{day.strftime('%Y-%m-%d')}")
+        label = time_container.find_element(By.XPATH, ".//label")
+        # get time
+        time_ms = int(label.get_attribute("for").replace("slot-", ""))
+        time = datetime.fromtimestamp(time_ms / 1000).time()
+        test_slot = datetime.combine(day.date(), time)
+        self._logger.info(f"earliest availabe slot is ", test_slot)
+
+        # check if short_notice
+        try:
+            short_notice = (
+                label.get_attribute("for").get_attribute("data-short-notice") == "true"
+            )
+        except Exception:
+            short_notice = False
+
+        # add error handling here if required.
+        randsleep(1)
+        # click on time box
+        first_available_time = time_container.find_element(By.XPATH, "./label")
+        randsleep(1)
+        first_available_time.click()
+        randsleep(1)
+        # click on continue button
+        continue_button = browser.find_element(By.ID, "slot-chosen-submit")
+        randsleep(1)
+        continue_button.click()
+        # label.click()
+        randsleep(1)
+
+        # dismiss warning
+        if short_notice:
+            if self.short_notice:
+                browser.find_element(
+                    By.XPATH, "(//button[@id='slot-warning-continue'])[2]"
+                ).click()
+            else:
+                self._logger.info("Skipping test as short notice.")
+                return None
+        else:
+            # click submit button
+            slot_warning_continue_button = browser.find_element(
+                By.ID, "slot-warning-continue"
+            )
+            slot_warning_continue_button.click()
+        randsleep(5)
+
+        self._logger.info("15 min timer started, releases in about 16.5 min ")
+        # this is wrapped in a loop in the original code.  I'm not sure what those multiple attempts are for.
+
+        randsleep(3)
+        # we are the candidate
+        browser.find_element(By.ID, "i-am-candidate").click()
+        randsleep(1)
+
+        # we make no manual attempt to solve the captcha here.  It might be
+        # solved for us by the Browser().
+        if "no longer available" in browser.page_source:
+            self._logger.info("Missed it: someone else got there first...")
+            return False
+        self.notify(f"A Driving test has been reserved on {test_slot} in {centre}.")
+
+        # start of new hold loop
+        # sleep for long time while dvsa release back to pool
+        spinner_sleep(950)
+        randsleep(15)
+
+        # find and click abandon button
+        abandon_button = browser.find_element(By.ID, "abandon")
+        randsleep(1)
+        abandon_button.click()
+        # TODO add explicit wait until clickable, something like
+        # element = WebDriverWait(driver, 10).until \
+        #     (EC.element_to_be_clickable((By.ID, "test-centre-change")))
+        # driver.find_element_by_id("test-centre-change").click()
+
+        randsleep(2)
+        # find and click abandon change button
+        abandon_changes_button = browser.find_element(By.ID, "abandon-changes")
+        randsleep(1)
+        abandon_changes_button.click()
+        randsleep(1)
+        self._logger.info("Released test.")
+        randsleep(2)
+        return test_slot
 
     def _scan_for_test(self, browser: Chrome, driver: Driver, centre: Centre):
         cal = browser.find_element(By.CLASS_NAME, "BookingCalendar-datesBody")
@@ -221,7 +366,7 @@ class Scraper:
 
             # note that we cannot find multiple tests on the same day
             # this could be fixed, quite easily
-            before_date = centre.date or driver.current_test.date
+            before_date = driver.current_test.date or centre.date
             if date.date() >= before_date.date():
                 continue
             if driver.disabled_dates and date in driver.disabled_dates:
@@ -252,11 +397,11 @@ class Scraper:
                     while True:
                         for driver in self.drivers:
                             self.find_tests(browser, driver)
-                            randsleep(5 * 60)
+                            randsleep(self.period * 60)
             except Exception as e:
                 errs.append(monotonic())
                 self._logger.exception(e)
-                randsleep(30)  # try not to be too predictable
+                randsleep(self.error_period)
 
             if len(errs) == 5 and errs[-1] - errs[0] < 10 * 60:
                 msg = (
