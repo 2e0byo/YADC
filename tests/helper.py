@@ -1,6 +1,6 @@
 import pytest
 import shutil
-from yadc_plus.yadc.browser import Browser
+from yadc.browser import Browser
 
 
 def executable_path(*tries):
