@@ -383,6 +383,14 @@ class Scraper:
 
         return None, None
 
+    def time_to_next_event(self) -> int:
+        """Time to sleep between runs.
+
+        Returns:
+            time (int): time in seconds.
+        """
+        return self.period * 60
+
     def __call__(self):
         while True:
             self._logger.info("Starting search loop")
@@ -404,7 +412,7 @@ class Scraper:
                     while self.running:
                         for driver in self.drivers:
                             self.find_tests(browser, driver)
-                            randsleep(self.period * 60)
+                            randsleep(self.time_to_next_event())
             except Exception as e:
                 errs.append(monotonic())
                 self._logger.exception(e)
