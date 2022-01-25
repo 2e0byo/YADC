@@ -56,6 +56,8 @@ class LoginError(Exception):
 
 class Scraper:
     instances = []
+    DVSA_OPENS = dt.time(6)
+    DVSA_CLOSES = dt.time(23, 30)
 
     def __init__(
         self,
@@ -83,8 +85,9 @@ class Scraper:
 
     @staticmethod
     def dvsa_disabled():
-        return datetime.now().time() < dt.time(6) or datetime.now().time() > dt.time(
-            23, 30
+        return (
+            datetime.now().time() < self.DVSA_OPENS
+            or datetime.now().time() > self.DVSA_CLOSES
         )
 
     @staticmethod
