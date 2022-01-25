@@ -82,6 +82,7 @@ class Scraper:
         self.period = 5
         self.error_period = 30
         self._search_counter = 0
+        self.running = True
 
     @staticmethod
     def dvsa_disabled():
@@ -392,12 +393,15 @@ class Scraper:
             while self.dvsa_disabled():
                 randsleep(60)  # has spinner
 
+            while not self.running:
+                randsleep(60)
+
             printed = False
             errs = deque([], maxlen=5)
 
             try:
                 with self._browser as browser:
-                    while True:
+                    while self.running:
                         for driver in self.drivers:
                             self.find_tests(browser, driver)
                             randsleep(self.period * 60)
