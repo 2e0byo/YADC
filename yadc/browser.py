@@ -172,7 +172,7 @@ class Browser:
         self._port = port
         if buster:
             buster = Path(buster)
-            if not buster.is_dir():
+            if not self.validate_buster(buster):
                 raise BrowserError("Please unzip buster and pass the dir.")
         self._buster = buster
         self._profile_dir = None
@@ -190,6 +190,10 @@ class Browser:
         else:
             self._errors_dir = Path(f"./errors/{self.name}")
         self.dump_on_error = dump_on_error
+
+    @staticmethod
+    def validate_buster(buster: Path):
+        return buster.is_dir()
 
     @property
     def port(self) -> int:
@@ -265,13 +269,9 @@ class Browser:
         # TODO: figure out what's actually happening here and fix this.
         self._proc = Popen(" ".join(cmd), shell=True)
 
-    def __enter__(self) -> webdriver.Chrome:
-        self.launch_chrome()
-
-        self._logger.info("Waiting 10s for page to load and js to run.")
-        randsleep(10)
-        chrome_options = webdriver.ChromeOptions()
-
+    def _connect(self):
+        """Connect to running browser."""
+        chrome_options = uc.ChromeOptions()
         chrome_options.add_experimental_option(
             "debuggerAddress", f"localhost:{self._port}"
         )
@@ -291,7 +291,14 @@ class Browser:
         )
         driver.execute_cdp_cmd("Network.enable", {})
         driver.refresh()
-        self._driver = driver
+        return driver
+
+    def __enter__(self) -> uc.Chrome:
+        self.launch_chrome()
+
+        self._logger.info("Waiting 10s for page to load and js to run.")
+        randsleep(10)
+        self._driver = self._connect()
         return driver
 
     @staticmethod
