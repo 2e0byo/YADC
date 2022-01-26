@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.2.1 (2022-01-26)
+### Fix
+* Correct log setting code. ([`415d923`](https://github.com/2e0byo/YADC/commit/415d92302ecc68d3d8ded387039feb6a59e498f5))
+
+### Documentation
+* Add readme. ([`8a9b8cf`](https://github.com/2e0byo/YADC/commit/8a9b8cf2f1ac8950dd5ec43b4c0fdc5991366896))
+
 ## v0.2.0 (2022-01-26)
 ### Feature
 * **scraper:** (unused) running property to permit pausing later. ([`af0ff83`](https://github.com/2e0byo/YADC/commit/af0ff83d63b05035b12dd167b9b4169a2803a1a4))
