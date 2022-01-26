@@ -366,6 +366,7 @@ class TorBrowser(Browser):
         super().__init__(**kwargs)
         self._tor = Path(tor)
         self._tor_port = tor_port
+        self._tor_proc = None
 
     @property
     def tor_port(self) -> str:
