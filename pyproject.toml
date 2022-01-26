@@ -4,7 +4,7 @@ version = "0.2.0"
 description = "Yet Another DVSA Cancellation checker"
 authors = ["John Maximilian <2e0byo@gmail.com>"]
 license = "MIT"
-readme = "readme.org"
+readme = "readme.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
