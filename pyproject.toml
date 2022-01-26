@@ -33,4 +33,4 @@ version_variable = ["yadc/__init__.py:__version__", "pyproject.toml:version"]
 branch = "master"
 upload_to_pypi = true
 upload_to_release = true
-build_command = "$HOME/.poetry/bin/poetry build"
+build_command = "pip install poetry && poetry build"
