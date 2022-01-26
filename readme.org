@@ -36,15 +36,35 @@ YADC is yet another checker for driving cancellations in the UK.
   - properly supported
 
 * Installation
+
+** With pip
+
+~YADC~ is now deployed on PyPi, so you can just
+
+#+begin_src:bash
+python3 -m pip install YADC
+#+end_src
+
+However, since every individual setup is going to vary somewhat, ~YADC~ /is only
+a library/.  You still have to decide how to use it.  A starting point is
+provided in the ~main.py~ of this repository: save it somewhere, edit it, and
+off you go.  A dummy CLI is provided which will merely direct you to do this ;)
+
+If anyone wishes to write a proper CLI I will happily merge it.
+
+Note that if you want captcha defeating you need to download [[https://github.com/dessant/buster/releases][buster]] and unzip it
+somewhere you can get at from your ~main.py~.  Likewise if you want ~tor~, it
+needs to be installed and executable as the user running your `main.py`.
+
+** From git (for development).
+
   - clone the repo
   - run ~poetry install~
   - run ~poetry shell~
-  - (optional) download [[https://github.com/dessant/buster/releases][buster]] and unzip.
+  - (optional) to download [[https://github.com/dessant/buster/releases][buster]] and unzip it.
   - (optional) install ~tor~ and ensure it can be run as a user.
   - edit ~main.py~ with your setup.
   - run ~python -m yadc.main~
-
- Currently there is no CLI, although it would be a doddle to add one.
 
 * Usage
   Currently you have to be at the computer to do anything.  You will see the

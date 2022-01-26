@@ -21,6 +21,9 @@ ipython = "^7.29.0"
 pytest-sugar = "^0.9.4"
 pytest-mock = "^3.6.1"
 
+[tool.poetry.scripts]
+yadc = "yadc.cli:main"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

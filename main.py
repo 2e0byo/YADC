@@ -1,13 +1,11 @@
 import logging
 from datetime import datetime
-import coloredlogs
 from pathlib import Path
 
-from .browser import Browser, TorBrowser
-from .scraper import Driver, Scraper, Test, Centre
+from yadc.browser import Browser, TorBrowser
+from yadc.scraper import Driver, Scraper, Test, Centre
 
 logging.basicConfig(level=logging.DEBUG)
-coloredlogs.install()
 
 
 def notify(msg):
