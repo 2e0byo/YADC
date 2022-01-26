@@ -68,6 +68,7 @@ jobs:
   build:
     name: Semantic release and Build
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: checkout
         uses: actions/checkout@v2
