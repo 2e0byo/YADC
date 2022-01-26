@@ -91,7 +91,10 @@ class Scraper:
         ) or datetime.now() > dt.combine(dt.date.today(), self.DVSA_CLOSES)
 
     @staticmethod
-    def input_text_box(el, text):
+    def input_text_box(el, text, click=False):
+        if click:
+            el.click()
+            randsleep(0.2)
         for char in text:
             el.send_keys(char)
             randsleep(0.01)
