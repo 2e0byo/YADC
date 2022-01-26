@@ -297,7 +297,7 @@ class Browser:
         driver.refresh()
         return driver
 
-    def __enter__(self) -> uc.Chrome:
+    def __enter__(self) -> CaptchaChrome:
         self.launch_chrome()
         self._driver = self._connect()
         return self._driver
