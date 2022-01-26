@@ -270,6 +270,8 @@ class Browser:
         # Needed to launch in the right env with a new config
         # TODO: figure out what's actually happening here and fix this.
         self._proc = Popen(" ".join(cmd), shell=True)
+        self._logger.info("Waiting 10s for page to load and js to run.")
+        randsleep(10)
 
     def _connect(self):
         """Connect to running browser."""
@@ -297,9 +299,6 @@ class Browser:
 
     def __enter__(self) -> uc.Chrome:
         self.launch_chrome()
-
-        self._logger.info("Waiting 10s for page to load and js to run.")
-        randsleep(10)
         self._driver = self._connect()
         return driver
 
