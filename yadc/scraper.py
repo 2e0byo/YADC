@@ -86,9 +86,9 @@ class Scraper:
 
     @staticmethod
     def dvsa_disabled():
-        return datetime.now() < dt.combine(
+        return datetime.now() < datetime.combine(
             dt.date.today(), self.DVSA_OPENS
-        ) or datetime.now() > dt.combine(dt.date.today(), self.DVSA_CLOSES)
+        ) or datetime.now() > datetime.combine(dt.date.today(), self.DVSA_CLOSES)
 
     @staticmethod
     def input_text_box(el, text, click=False):
