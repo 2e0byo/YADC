@@ -7,68 +7,69 @@ on:
 
 
 jobs:
-  test:
-    defaults:
-      run:
-        shell: bash
-    strategy:
-      matrix:
-        os: ["macos-latest", "ubuntu-latest", "windows-latest"]
-        include:
-          - os: macos-latest
-            INSTALL: brew install tor
+  # test:
+  #   defaults:
+  #     run:
+  #       shell: bash
+  #   strategy:
+  #     matrix:
+  #       os: ["macos-latest", "ubuntu-latest", "windows-latest"]
+  #       include:
+  #         - os: macos-latest
+  #           INSTALL: brew install tor
 
-          - os: ubuntu-latest
-            INSTALL: sudo apt-get install -y tor
+  #         - os: ubuntu-latest
+  #           INSTALL: sudo apt-get install -y tor
 
-          - os: windows-latest
-            INSTALL: python scripts/download_tor.py
+  #         - os: windows-latest
+  #           INSTALL: python scripts/download_tor.py
 
-        python-version: ["3.9", "3.10"]
-      fail-fast: false
+  #       python-version: ["3.9", "3.10"]
+  #     fail-fast: false
 
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@v1
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: Check out repo
+  #       uses: actions/checkout@v1
 
-      - name: Install requests
-        run: pip install requests
+  #     - name: Install requests
+  #       run: pip install requests
 
-      - name: Install tor
-        run: ${{ matrix.INSTALL }}
+  #     - name: Install tor
+  #       run: ${{ matrix.INSTALL }}
 
-      - name: Set up python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
+  #     - name: Set up python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v2
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
 
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+  #     - name: Install Poetry
+  #       uses: snok/install-poetry@v1
+  #       with:
+  #         virtualenvs-create: true
+  #         virtualenvs-in-project: true
 
-      - name: Load cached venv
-        id: cached-poetry-deps
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+  #     - name: Load cached venv
+  #       id: cached-poetry-deps
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: .venv
+  #         key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Install deps
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
+  #     - name: Install deps
+  #       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+  #       run: poetry install --no-interaction --no-root
 
-      - name: Run tests
-        run: |
-          source $VENV
-          pytest tests/ -k 'not graphical'
+  #     - name: Run tests
+  #       run: |
+  #         source $VENV
+  #         pytest tests/ -k 'not graphical'
 
   build:
     name: Semantic release and Build
     runs-on: ubuntu-latest
-    needs: test
+    # needs: test
+    concurrency: build
     steps:
       - name: checkout
         uses: actions/checkout@v2
