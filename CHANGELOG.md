@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.1 (2022-01-26)
+### Fix
+* No longer static method. ([`4da97c7`](https://github.com/2e0byo/YADC/commit/4da97c79968e31a16bc502baa6cadfc97af81611))
+* Datetime.combine. ([`2a4707b`](https://github.com/2e0byo/YADC/commit/2a4707b2e5de41c331af31b88edc2ea843676ed6))
+
 ## v0.3.0 (2022-01-26)
 ### Feature
 * **scraper:** Click on entry if desired. ([`e45dddb`](https://github.com/2e0byo/YADC/commit/e45dddb88900e4858e0f18b5de2321e7aab6853b))
