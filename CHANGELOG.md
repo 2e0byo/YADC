@@ -2,6 +2,11 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.2 (2022-01-26)
+### Fix
+* Leftover uc breaking typehint. ([`b519f8d`](https://github.com/2e0byo/YADC/commit/b519f8d39a1492416689574a102358b7be312a6c))
+* Drop undetected_chromedriver and fix return. ([`7d900a7`](https://github.com/2e0byo/YADC/commit/7d900a7dc393453d53fde5478588bba515beefae))
+
 ## v0.3.1 (2022-01-26)
 ### Fix
 * No longer static method. ([`4da97c7`](https://github.com/2e0byo/YADC/commit/4da97c79968e31a16bc502baa6cadfc97af81611))
