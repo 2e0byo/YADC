@@ -84,8 +84,7 @@ class Scraper:
         self._search_counter = 0
         self.running = True
 
-    @staticmethod
-    def dvsa_disabled():
+    def dvsa_disabled(self):
         return datetime.now() < datetime.combine(
             dt.date.today(), self.DVSA_OPENS
         ) or datetime.now() > datetime.combine(dt.date.today(), self.DVSA_CLOSES)
