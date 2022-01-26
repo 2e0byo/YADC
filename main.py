@@ -1,11 +1,12 @@
 import logging
 from datetime import datetime
 from pathlib import Path
+import coloredlogs
 
 from yadc.browser import Browser, TorBrowser
 from yadc.scraper import Driver, Scraper, Test, Centre
 
-logging.basicConfig(level=logging.DEBUG)
+coloredlogs.increase_verbosity()  # for testing
 
 
 def notify(msg):
