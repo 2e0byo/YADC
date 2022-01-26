@@ -27,3 +27,10 @@ yadc = "yadc.cli:main"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.semantic_release]
+version_variable = ["src_folder/__init__.py:__version__", "pyproject.toml:version"]
+branch = "master"
+upload_to_pypi = true
+upload_to_release = true
+build_command = "poetry build"
