@@ -275,7 +275,7 @@ class Browser:
 
     def _connect(self):
         """Connect to running browser."""
-        chrome_options = uc.ChromeOptions()
+        chrome_options = webdriver.ChromeOptions()
         chrome_options.add_experimental_option(
             "debuggerAddress", f"localhost:{self._port}"
         )
@@ -300,7 +300,7 @@ class Browser:
     def __enter__(self) -> uc.Chrome:
         self.launch_chrome()
         self._driver = self._connect()
-        return driver
+        return self._driver
 
     @staticmethod
     def _errorfn(now: datetime = None, suffix: str = "txt"):
