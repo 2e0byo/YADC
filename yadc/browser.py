@@ -172,8 +172,8 @@ class Browser:
         self._port = port
         if buster:
             buster = Path(buster)
-            if not self.validate_buster(buster):
-                raise BrowserError("Please unzip buster and pass the dir.")
+            self.validate_buster(buster)
+            self._buster = buster
         self._buster = buster
         self._profile_dir = None
         self._chrome = f'"{chrome}"'
@@ -193,7 +193,9 @@ class Browser:
 
     @staticmethod
     def validate_buster(buster: Path):
-        return buster.is_dir()
+        print("inside validate buster")
+        if not buster.is_dir():
+            raise BrowserError("Please unzip buster and pass the dir.")
 
     @property
     def port(self) -> int:
