@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2022-01-26)
+### Feature
+* **scraper:** Click on entry if desired. ([`e45dddb`](https://github.com/2e0byo/YADC/commit/e45dddb88900e4858e0f18b5de2321e7aab6853b))
+
+### Documentation
+* Update readme. ([`4d9e441`](https://github.com/2e0byo/YADC/commit/4d9e441375ca58420fc42c4bba66ab85dd04d821))
+
 ## v0.2.1 (2022-01-26)
 ### Fix
 * Correct log setting code. ([`415d923`](https://github.com/2e0byo/YADC/commit/415d92302ecc68d3d8ded387039feb6a59e498f5))
