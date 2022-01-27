@@ -63,7 +63,7 @@ jobs:
       - name: Run tests
         run: |
           source $VENV
-          pytest tests/ -k 'not graphical'
+          pytest tests/ -m "not graphical and not manual"
 
   build:
     name: Semantic release and Build

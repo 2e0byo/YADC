@@ -1,0 +1,2 @@
+"use strict";function initReset(a){const b=document.createElement("script");b.onload=function(b){b.target.remove(),document.dispatchEvent(new CustomEvent("___resetCaptcha",{detail:a}))},b.src=chrome.extension.getURL("/src/content/reset.js"),document.documentElement.appendChild(b)}function addListener(){const a=function(a){"resetCaptcha"===a.id&&(b(),initReset(a.challengeUrl))},b=function(){window.clearTimeout(c),chrome.runtime.onMessage.removeListener(a)},c=window.setTimeout(b,1e4);// 10 seconds
+chrome.runtime.onMessage.addListener(a)}

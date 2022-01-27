@@ -1,0 +1,360 @@
+{
+   "buttonText_addApi": {
+      "message": "Add API"
+   },
+   "buttonText_downloadApp": {
+      "message": "Download app"
+   },
+   "buttonText_goBack": {
+      "message": "Go back"
+   },
+   "buttonText_installApp": {
+      "message": "Install app"
+   },
+   "buttonText_reset": {
+      "message": "Reset the challenge"
+   },
+   "buttonText_solve": {
+      "message": "Solve the challenge"
+   },
+   "error_apiQuotaExceeded": {
+      "message": "API quota exceeded. Try again later, or visit the extension's options and switch to a different service."
+   },
+   "error_captchaNotSolved": {
+      "message": "Captcha could not be solved. Try again after requesting a new challenge."
+   },
+   "error_clientAppUpdateFailed": {
+      "message": "The client app cannot be updated. Download and install the latest version from the extension's options."
+   },
+   "error_internalError": {
+      "message": "Something went wrong. Open the browser console for more details."
+   },
+   "error_missingApiKey": {
+      "message": "API key missing. Visit the extension's options to configure the service."
+   },
+   "error_missingClientApp": {
+      "message": "Cannot connect to client app. Finish setting up the app or turn off the simulation of user interactions from the extension's options."
+   },
+   "error_outdatedClientApp": {
+      "message": "The client app is outdated. Download and install the latest version from the extension's options."
+   },
+   "error_scriptsNotAllowed": {
+      "message": "Content scripts are not allowed on this page."
+   },
+   "extensionDescription": {
+      "message": "Save time by asking Buster to solve captchas for you."
+   },
+   "extensionName": {
+      "message": "Buster: Captcha Solver for Humans"
+   },
+   "info_updatingClientApp": {
+      "message": "Updating client app. Solving will continue in a moment, do not switch away from the current tab."
+   },
+   "inputLabel_apiKey": {
+      "message": "API key"
+   },
+   "inputLabel_apiKeyType": {
+      "message": "API key: $TYPE$",
+      "placeholders": {
+         "type": {
+            "content": "$1",
+            "example": "English"
+         }
+      }
+   },
+   "inputLabel_appLocation": {
+      "message": "App location"
+   },
+   "inputLabel_manifestLocation": {
+      "message": "Manifest location"
+   },
+   "linkText_apiGuide": {
+      "message": "How to get an API key?"
+   },
+   "linkText_installGuide": {
+      "message": "Installation guide"
+   },
+   "optionSectionDescription_client": {
+      "message": "The client app enables you to simulate user interactions and improves the success rate of the extension."
+   },
+   "optionSectionTitle_client": {
+      "message": "Client app"
+   },
+   "optionSectionTitle_misc": {
+      "message": "Miscellaneous"
+   },
+   "optionSectionTitle_services": {
+      "message": "Services"
+   },
+   "optionTitle_autoUpdateClientApp": {
+      "message": "Auto-update client app"
+   },
+   "optionTitle_ibmSpeechApiLoc": {
+      "message": "API location"
+   },
+   "optionTitle_loadEnglishChallenge": {
+      "message": "Load challenge in English"
+   },
+   "optionTitle_microsoftSpeechApiLoc": {
+      "message": "API location"
+   },
+   "optionTitle_navigateWithKeyboard": {
+      "message": "Navigate with keyboard"
+   },
+   "optionTitle_simulateUserInput": {
+      "message": "Simulate user interactions"
+   },
+   "optionTitle_speechService": {
+      "message": "Speech service"
+   },
+   "optionTitle_tryEnglishSpeechModel": {
+      "message": "Retry speech recognition with English model"
+   },
+   "optionTitle_witSpeechApiLang": {
+      "message": "API language"
+   },
+   "optionValue_ibmSpeechApiLoc_dallas": {
+      "message": "Dallas"
+   },
+   "optionValue_ibmSpeechApiLoc_frankfurt": {
+      "message": "Frankfurt"
+   },
+   "optionValue_ibmSpeechApiLoc_london": {
+      "message": "London"
+   },
+   "optionValue_ibmSpeechApiLoc_seoul": {
+      "message": "Seoul"
+   },
+   "optionValue_ibmSpeechApiLoc_sydney": {
+      "message": "Sydney"
+   },
+   "optionValue_ibmSpeechApiLoc_tokyo": {
+      "message": "Tokyo"
+   },
+   "optionValue_ibmSpeechApiLoc_washington": {
+      "message": "Washington DC"
+   },
+   "optionValue_microsoftSpeechApiLoc_centralCa": {
+      "message": "Canada Central"
+   },
+   "optionValue_microsoftSpeechApiLoc_centralFr": {
+      "message": "France Central"
+   },
+   "optionValue_microsoftSpeechApiLoc_centralIn": {
+      "message": "Central India"
+   },
+   "optionValue_microsoftSpeechApiLoc_centralKr": {
+      "message": "Korea Central"
+   },
+   "optionValue_microsoftSpeechApiLoc_centralUs": {
+      "message": "Central US"
+   },
+   "optionValue_microsoftSpeechApiLoc_eastAsia": {
+      "message": "East Asia"
+   },
+   "optionValue_microsoftSpeechApiLoc_eastAu": {
+      "message": "Australia East"
+   },
+   "optionValue_microsoftSpeechApiLoc_eastJp": {
+      "message": "Japan East"
+   },
+   "optionValue_microsoftSpeechApiLoc_eastUs": {
+      "message": "East US"
+   },
+   "optionValue_microsoftSpeechApiLoc_eastUs2": {
+      "message": "East US 2"
+   },
+   "optionValue_microsoftSpeechApiLoc_northCentralUs": {
+      "message": "North Central US"
+   },
+   "optionValue_microsoftSpeechApiLoc_northCh": {
+      "message": "Switzerland North"
+   },
+   "optionValue_microsoftSpeechApiLoc_northEu": {
+      "message": "North Europe"
+   },
+   "optionValue_microsoftSpeechApiLoc_southBr": {
+      "message": "Brazil South"
+   },
+   "optionValue_microsoftSpeechApiLoc_southCentralUs": {
+      "message": "South Central US"
+   },
+   "optionValue_microsoftSpeechApiLoc_southUk": {
+      "message": "UK South"
+   },
+   "optionValue_microsoftSpeechApiLoc_southeastAsia": {
+      "message": "Southeast Asia"
+   },
+   "optionValue_microsoftSpeechApiLoc_westCentralUs": {
+      "message": "West Central US"
+   },
+   "optionValue_microsoftSpeechApiLoc_westEu": {
+      "message": "West Europe"
+   },
+   "optionValue_microsoftSpeechApiLoc_westJp": {
+      "message": "Japan West"
+   },
+   "optionValue_microsoftSpeechApiLoc_westUs": {
+      "message": "West US"
+   },
+   "optionValue_microsoftSpeechApiLoc_westUs2": {
+      "message": "West US 2"
+   },
+   "optionValue_speechService_googleSpeechApi": {
+      "message": "Google Cloud Speech-to-Text"
+   },
+   "optionValue_speechService_ibmSpeechApi": {
+      "message": "IBM Watson Speech to Text"
+   },
+   "optionValue_speechService_microsoftSpeechApi": {
+      "message": "Microsoft Azure Speech to Text"
+   },
+   "optionValue_speechService_witSpeechApi": {
+      "message": "Wit.ai"
+   },
+   "optionValue_speechService_witSpeechApiDemo": {
+      "message": "Wit.ai (managed)"
+   },
+   "optionValue_witSpeechApiLang_arabic": {
+      "message": "Arabic"
+   },
+   "optionValue_witSpeechApiLang_bengali": {
+      "message": "Bengali"
+   },
+   "optionValue_witSpeechApiLang_catalan": {
+      "message": "Catalan"
+   },
+   "optionValue_witSpeechApiLang_chinese": {
+      "message": "Chinese"
+   },
+   "optionValue_witSpeechApiLang_dutch": {
+      "message": "Dutch"
+   },
+   "optionValue_witSpeechApiLang_english": {
+      "message": "English"
+   },
+   "optionValue_witSpeechApiLang_finnish": {
+      "message": "Finnish"
+   },
+   "optionValue_witSpeechApiLang_french": {
+      "message": "French"
+   },
+   "optionValue_witSpeechApiLang_german": {
+      "message": "German"
+   },
+   "optionValue_witSpeechApiLang_hindi": {
+      "message": "Hindi"
+   },
+   "optionValue_witSpeechApiLang_indonesian": {
+      "message": "Indonesian"
+   },
+   "optionValue_witSpeechApiLang_italian": {
+      "message": "Italian"
+   },
+   "optionValue_witSpeechApiLang_japanese": {
+      "message": "Japanese"
+   },
+   "optionValue_witSpeechApiLang_kannada": {
+      "message": "Kannada"
+   },
+   "optionValue_witSpeechApiLang_korean": {
+      "message": "Korean"
+   },
+   "optionValue_witSpeechApiLang_malay": {
+      "message": "Malay"
+   },
+   "optionValue_witSpeechApiLang_malayalam": {
+      "message": "Malayalam"
+   },
+   "optionValue_witSpeechApiLang_marathi": {
+      "message": "Marathi"
+   },
+   "optionValue_witSpeechApiLang_polish": {
+      "message": "Polish"
+   },
+   "optionValue_witSpeechApiLang_portuguese": {
+      "message": "Portuguese"
+   },
+   "optionValue_witSpeechApiLang_russian": {
+      "message": "Russian"
+   },
+   "optionValue_witSpeechApiLang_sinhala": {
+      "message": "Sinhala"
+   },
+   "optionValue_witSpeechApiLang_spanish": {
+      "message": "Spanish"
+   },
+   "optionValue_witSpeechApiLang_swedish": {
+      "message": "Swedish"
+   },
+   "optionValue_witSpeechApiLang_tamil": {
+      "message": "Tamil"
+   },
+   "optionValue_witSpeechApiLang_telugu": {
+      "message": "Telugu"
+   },
+   "optionValue_witSpeechApiLang_thai": {
+      "message": "Thai"
+   },
+   "optionValue_witSpeechApiLang_turkish": {
+      "message": "Turkish"
+   },
+   "optionValue_witSpeechApiLang_urdu": {
+      "message": "Urdu"
+   },
+   "optionValue_witSpeechApiLang_vietnamese": {
+      "message": "Vietnamese"
+   },
+   "pageContent_installDesc": {
+      "message": "The client app enables you to simulate user interactions and improves the success rate of the extension."
+   },
+   "pageContent_installErrorDesc": {
+      "message": "The installation has failed. Check the browser console for more details, and open an issue on GitHub if this error persists."
+   },
+   "pageContent_installErrorTitle": {
+      "message": "Something went wrong"
+   },
+   "pageContent_installSuccessDesc": {
+      "message": "The client app has been installed for the current browser."
+   },
+   "pageContent_installSuccessTitle": {
+      "message": "Installation finished"
+   },
+   "pageContent_installTitle": {
+      "message": "Install Buster Client"
+   },
+   "pageContent_manifestLocationDesc": {
+      "message": "The manifest location is browser-dependent, edit the path only if the installation does not succeed."
+   },
+   "pageContent_optionClientAppDownloadDesc": {
+      "message": "Download and install the client app to get started. $INSTALLGUIDE$",
+      "placeholders": {
+         "installGuide": {
+            "content": "$1",
+            "example": "Installation guide"
+         }
+      }
+   },
+   "pageContent_optionClientAppOSError": {
+      "message": "Your operating system is not supported."
+   },
+   "pageTitle": {
+      "message": "$PAGETITLE$ - $EXTENSIONNAME$",
+      "placeholders": {
+         "extensionName": {
+            "content": "$2",
+            "example": "Extension Name"
+         },
+         "pageTitle": {
+            "content": "$1",
+            "example": "Options"
+         }
+      }
+   },
+   "pageTitle_contribute": {
+      "message": "Contribute"
+   },
+   "pageTitle_options": {
+      "message": "Options"
+   }
+}

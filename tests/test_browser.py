@@ -8,10 +8,12 @@ def run_test_browser(b):
         assert driver.page_source
 
 
+@pytest.mark.graphical
 def test_paths_chrome_chromedriver_graphical(chrome, chromedriver):
     run_test_browser(Browser(chrome=chrome, chromedriver=chromedriver))
 
 
+@pytest.mark.graphical
 def test_paths_tor_browser_graphical(chrome, chromedriver, tor):
     run_test_browser(TorBrowser(chrome=chrome, chromedriver=chromedriver, tor=tor))
 

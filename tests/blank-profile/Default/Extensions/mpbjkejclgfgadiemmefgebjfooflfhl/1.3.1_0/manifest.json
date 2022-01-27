@@ -1,0 +1,46 @@
+{
+   "author": "Armin Sebastian",
+   "background": {
+      "page": "src/background/index.html"
+   },
+   "content_scripts": [ {
+      "all_frames": true,
+      "css": [ "src/solve/reset-button.css" ],
+      "js": [ "src/manifest.js", "src/solve/script.js" ],
+      "matches": [ "https://www.google.com/recaptcha/api2/bframe*", "https://www.recaptcha.net/recaptcha/api2/bframe*", "https://recaptcha.net/recaptcha/api2/bframe*", "https://www.google.com/recaptcha/enterprise/bframe*", "https://www.recaptcha.net/recaptcha/enterprise/bframe*", "https://recaptcha.net/recaptcha/enterprise/bframe*" ],
+      "run_at": "document_idle"
+   }, {
+      "js": [ "src/content/setup.js" ],
+      "matches": [ "http://127.0.0.1/buster/setup?session=*" ],
+      "run_at": "document_idle"
+   } ],
+   "content_security_policy": "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src *; object-src 'none'; frame-ancestors http://127.0.0.1:*;",
+   "default_locale": "en",
+   "description": "__MSG_extensionDescription__",
+   "homepage_url": "https://github.com/dessant/buster",
+   "icons": {
+      "128": "src/icons/app/icon-128.png",
+      "16": "src/icons/app/icon-16.png",
+      "19": "src/icons/app/icon-19.png",
+      "24": "src/icons/app/icon-24.png",
+      "32": "src/icons/app/icon-32.png",
+      "38": "src/icons/app/icon-38.png",
+      "48": "src/icons/app/icon-48.png",
+      "64": "src/icons/app/icon-64.png",
+      "96": "src/icons/app/icon-96.png"
+   },
+   "incognito": "split",
+   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu85AVm/GAYk0+LiBRMjljsfNBT+d6s7/qCobz2yL3h1ETVUq6hkNSlxj5PcfyMBwRjWdwtIrelZzyDKcl4cqaUsubzLLqsRNVa/F9POkSf0WlA/IhbVH/CBP1NUyiARWYocnqI+0v/XBDIm0hCfJHmEwHoqVvE0/XPK2uEonEyMaAegUwmLees9nfp2hM27KzJ/toWvnPx8mJ8t/DnGOLPpFAnpjiQZVyI7q1qLGXHOZ9pkGSBlLDw8qCLTaTBolAxARaInQlVRlY4k+A64gZidmtXJjUN8HXdhYgkvDZ1O2RUvgF88Loy06pLvXAkWXxOxvIhBCyd+ikoWwdhb3GwIDAQAB",
+   "manifest_version": 2,
+   "minimum_chrome_version": "76.0",
+   "name": "__MSG_extensionName__",
+   "options_ui": {
+      "chrome_style": false,
+      "open_in_tab": true,
+      "page": "src/options/index.html"
+   },
+   "permissions": [ "storage", "notifications", "webRequest", "webRequestBlocking", "webNavigation", "nativeMessaging", "\u003Call_urls>" ],
+   "update_url": "https://clients2.google.com/service/update2/crx",
+   "version": "1.3.1",
+   "web_accessible_resources": [ "src/setup/index.html", "src/content/reset.js", "src/solve/solver-button.css" ]
+}
