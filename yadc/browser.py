@@ -177,7 +177,6 @@ class Browser:
         if buster:
             buster = Path(buster)
             self.validate_buster(buster)
-            self._buster = buster
         self._buster = buster
         self._profile_dir = None
         self._chrome = f'"{chrome}"'
