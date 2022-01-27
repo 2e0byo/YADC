@@ -85,15 +85,17 @@ something more appropriate!  A nice service is \`pushover\`, though it does have
 a once-off payment).  If the script does find a test it will block
 
 
-# Roadmap
+# Roadmap / Good first PRs
 
--   [ ] Currently we don't use `undetected_chromedriver` as I couldn't get it
-    playing nicely with remote controlling.  This should be easy to fix, but I
-    haven't looked into it.  We may not need it anyhow, but it might be a good
-    idea to take the default options from uc and use them.  A pr for this would
-    be welcome.
+-   [ ] Work in `undetected_browser.py` would make it possible to use
+        `undetected_chromedriver`.  A PR implementing this would be welcome.
 -   [ ] We have no cli.  That's probably not an issue, but it would be trivial
     to add one, e.g. with click.
+    
+# Use in other projects
+
+YADC has been written to be reusable.  See [docs/reusing](docs/reusing.md) for
+pointers.
 
 
 # Appeal to DVSA
