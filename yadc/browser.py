@@ -338,6 +338,10 @@ class Browser:
                 self._dump(exc_type, exc_val, exc_tb)
             except Exception as e:
                 tb.print_exc()
+        try:
+            self._driver.quit()
+        except Exception:
+            pass
 
         self.kill(self._proc, "Chrome")
         try:
