@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.6.0 (2022-01-27)
+### Feature
+* **browser:** Allow passing chrome path for windoze. ([`f67725f`](https://github.com/2e0byo/YADC/commit/f67725f8be6e0ba1acf719e972b4272f5f04903d))
+
 ## v0.5.0 (2022-01-27)
 ### Feature
 * **scraper:** Sleep for more predictable time and be verbose. ([`dbe4efb`](https://github.com/2e0byo/YADC/commit/dbe4efbe4022e2a11f22e13123d4be0c009cfbc4))
