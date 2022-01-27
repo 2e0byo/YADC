@@ -19,7 +19,7 @@ class BrowserError(Exception):
     pass
 
 
-class CaptchaChrome(webdriver.Chrome):
+class CaptchaChromeBase:
     """A Chrome which will try to solve captchas for you."""
 
     INCAPSULA = "unsuccessful. Incapsula"
@@ -124,6 +124,10 @@ class CaptchaChrome(webdriver.Chrome):
             self.bypass()
         args = dict(by=by, value=value)
         return super().find_element(**{k: v for k, v in args.items() if v})
+
+
+class CaptchaChrome(CaptchaChromeBase, webdriver.Chrome):
+    """Captcha Chrome based on webdriver.Chrome."""
 
 
 class Browser:
