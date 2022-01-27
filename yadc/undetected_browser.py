@@ -28,7 +28,7 @@ class UndetectedBrowser(Browser):
         return driver
 
 
-class UndetectedTorBrowser(UndetectedBrowser):
+class UndetectedTorBrowser(UndetectedBrowser, TorBrowser):
     @property
     def tor_arg(self):
         return f'--proxy-server="socks4://localhost:{self.tor_port}"'
