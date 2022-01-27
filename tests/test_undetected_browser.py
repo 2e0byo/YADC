@@ -59,18 +59,18 @@ def test_automated_manual_buster_undetected_browser(tmp_path):
 
 @pytest.mark.graphical
 @pytest.mark.manual
-def test_manual_buster_undetected_tor_browser(tmp_path):
+def test_manual_buster_undetected_tor_browser(tmp_path, tor):
     br = ManualBusterUndetectedTorBrowser(
-        buster=True, profile_dir=(tmp_path) / "blank-profile"
+        buster=True, profile_dir=(tmp_path) / "blank-profile", tor=tor
     )
     run_browser_test(br)
 
 
 @pytest.mark.graphical
-def test_automated_manual_buster_undetected_tor_browser(tmp_path):
+def test_automated_manual_buster_undetected_tor_browser(tmp_path, tor):
     shutil.copytree("tests/blank-profile", tmp_path / "blank-profile")
     br = ManualBusterUndetectedTorBrowser(
-        buster=True, profile_dir=(tmp_path) / "blank-profile"
+        buster=True, profile_dir=(tmp_path) / "blank-profile", tor=tor
     )
     run_browser_test(br)
 
@@ -83,8 +83,8 @@ def test_undetected_browser(tmp_path):
 
 
 @pytest.mark.graphical
-def test_undetected_tor_browser(tmp_path):
-    br = UndetectedTorBrowser()
+def test_undetected_tor_browser(tmp_path, tor):
+    br = UndetectedTorBrowser(tor=tor)
     with br as driver:
         pingtest(driver)
 
@@ -96,6 +96,6 @@ def test_buster_undetected_browser(tmp_path):
 
 
 @pytest.mark.graphical
-def test_buster_undetected_tor_browser(tmp_path):
-    br = UndetectedTorBrowser(buster="tests/buster")
+def test_buster_undetected_tor_browser(tmp_path, tor):
+    br = UndetectedTorBrowser(buster="tests/buster", tor=tor)
     run_browser_test(br)
