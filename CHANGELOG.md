@@ -2,6 +2,19 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2022-01-27)
+### Feature
+* **browser:** Try to kill driver if possible. ([`10648f8`](https://github.com/2e0byo/YADC/commit/10648f8e94b54510930f2f77f23aa9bca99cdbec))
+* Undetected_browser classes. ([`81ce832`](https://github.com/2e0byo/YADC/commit/81ce832ada0cbd8feb2a4ddcceaabbe98299be16))
+
+### Fix
+* **undetected_browser:** Now works with tor and buster. ([`6d06525`](https://github.com/2e0byo/YADC/commit/6d06525b1c2da09b9e4e727b0fa4b8edbd16a987))
+* **undetected tor browser:** Include tor mixin! ([`60e2495`](https://github.com/2e0byo/YADC/commit/60e24957e90a11cdc0c375f9427b8fabae06141d))
+* **undetected_browser:** Manual mixin and test. ([`86ff1a7`](https://github.com/2e0byo/YADC/commit/86ff1a717b170b1e6138349d59a7a300917140c3))
+
+### Documentation
+* Browsers. ([`d9ce7d3`](https://github.com/2e0byo/YADC/commit/d9ce7d3c07974ce7c69313b781d9de0067d1907b))
+
 ## v0.3.2 (2022-01-26)
 ### Fix
 * Leftover uc breaking typehint. ([`b519f8d`](https://github.com/2e0byo/YADC/commit/b519f8d39a1492416689574a102358b7be312a6c))
