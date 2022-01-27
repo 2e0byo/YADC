@@ -1,8 +1,10 @@
 """Browser and CaptchaChrome objects based around `undetected_chromedriver`."""
 from pathlib import Path
 
-from .browser import CaptchaChromeBase, Browser, TorBrowser, BrowserError
-import undetected_chromedriver as us
+import undetected_chromedriver as uc
+from selenium.webdriver.common.by import By
+
+from .browser import Browser, BrowserError, CaptchaChromeBase, TorBrowser
 
 
 class UndetectedCaptchaChrome(CaptchaChromeBase, uc.Chrome):
@@ -16,7 +18,7 @@ class UndetectedBrowser(Browser):
         pass
 
     def _connect(self, *args, chrome_options: uc.ChromeOptions = None):
-        chrome_options = ChromeOptions or uc.ChromeOptions()
+        chrome_options = chrome_options or uc.ChromeOptions()
         if self._buster:
             chrome_options.add_argument(self.buster_arg)
 
@@ -32,7 +34,7 @@ class UndetectedTorBrowser(UndetectedBrowser):
         return f'--proxy-server="socks4://localhost:{self.tor_port}"'
 
     def _connect(self, *args, chrome_options: uc.ChromeOptions = None):
-        chrome_options = ChromeOptions or uc.ChromeOptions()
+        chrome_options = chrome_options or uc.ChromeOptions()
         chrome_options.add_argument(self.tor_arg)
         return super()._connect(*args, chrome_options=chrome_options)
 
@@ -41,10 +43,19 @@ class ManualBusterMixin:
     BUSTER_URL = "https://chrome.google.com/webstore/detail/buster-captcha-solver-for/mpbjkejclgfgadiemmefgebjfooflfhl?hl=en"
     PROFILE_DIR = "blank-profile"
 
+    def __init__(self, *args, profile_dir: Path = None, **kwargs):
+        buster = kwargs.get("buster", None)
+        if buster:
+            del kwargs["buster"]
+        super().__init__(*args, **kwargs)
+        if buster:
+            self._buster = buster
+        self.profile_dir = profile_dir or self.PROFILE_DIR
+
     def generate_profile(self):
         """Generate a profile and then install buster manually."""
         chrome_options = uc.ChromeOptions()
-        chrome_options.user_data_dir = "blank-profile"
+        chrome_options.user_data_dir = self.profile_dir
         driver = UndetectedCaptchaChrome(options=chrome_options)
         driver.get(self.BUSTER_URL)
         driver.find_element(By.XPATH, "//*[text()='I agree']").click()
@@ -52,11 +63,13 @@ class ManualBusterMixin:
             By.CSS_SELECTOR, ".g-c-R.webstore-test-button-label"
         ).click()
         input("Accept installation and press enter: ")
+        driver.close()
         del driver
 
     def _connect(self, *args, chrome_options: uc.ChromeOptions = None):
+        chrome_options = chrome_options or uc.ChromeOptions()
         if self._buster:
-            profile_dir = Path(self.PROFILE_DIR)
+            profile_dir = Path(self.profile_dir)
             if not profile_dir.is_dir():
                 if profile_dir.exists():
                     raise BrowserError(
@@ -65,7 +78,7 @@ class ManualBusterMixin:
                 self.generate_profile()
             chrome_options.user_data_dir = self.PROFILE_DIR
             self._buster = None
-        return super()._connext(*args, chrome_options=chrome_options)
+        return super()._connect(*args, chrome_options=chrome_options)
 
 
 class ManualBusterUndetectedBrowser(ManualBusterMixin, UndetectedBrowser):
