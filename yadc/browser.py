@@ -196,7 +196,6 @@ class Browser:
 
     @staticmethod
     def validate_buster(buster: Path):
-        print("inside validate buster")
         if not buster.is_dir():
             raise BrowserError("Please unzip buster and pass the dir.")
 
