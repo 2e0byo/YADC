@@ -1,6 +1,5 @@
 from yadc.browser import Browser, TorBrowser
 import pytest
-from helper import chrome, chromedriver, tor
 
 
 def run_test_browser(b):
