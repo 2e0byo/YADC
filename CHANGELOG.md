@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2022-01-27)
+### Feature
+* **scraper:** Sleep for more predictable time and be verbose. ([`dbe4efb`](https://github.com/2e0byo/YADC/commit/dbe4efbe4022e2a11f22e13123d4be0c009cfbc4))
+
 ## v0.4.0 (2022-01-27)
 ### Feature
 * **browser:** Try to kill driver if possible. ([`10648f8`](https://github.com/2e0byo/YADC/commit/10648f8e94b54510930f2f77f23aa9bca99cdbec))
