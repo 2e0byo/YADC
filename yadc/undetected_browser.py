@@ -44,6 +44,10 @@ class UndetectedCaptchaChrome(CaptchaChromeBase, uc.Chrome):
 class UndetectedBrowser(Browser):
     """A browser which lets `undetected_chromedriver` launch chrome for us."""
 
+    def __init__(self, *args, chrome=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._chrome = f'"{chrome}"' if chrome else None
+
     def launch_chrome(self):
         pass
 
@@ -52,6 +56,7 @@ class UndetectedBrowser(Browser):
         if self._buster:
             chrome_options.add_argument(self.buster_arg)
 
+        kwargs = {"options": chrome_options, "browser_executable_path": self._chrome}
         driver = UndetectedCaptchaChrome(options=chrome_options)
 
         driver.get(self._url)
