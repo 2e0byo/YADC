@@ -1,4 +1,6 @@
 import shutil
+from json import load
+from pathlib import Path
 
 import pytest
 from selenium.webdriver.common.by import By
@@ -16,10 +18,22 @@ def pingtest(driver):
 
 
 def run_browser_test(browser):
-    unique_url = (
-        "chrome-extension://mpbjkejclgfgadiemmefgebjfooflfhl/src/options/index.html"
-    )
+    unique_url = "chrome-extension://src/options/index.html"
     with browser as driver:
+
+        try:
+            with Path(driver.user_data_dir, "Default/Preferences").open() as f:
+                data = load(f)
+            secret, props = [
+                (k, v)
+                for k, v in data["extensions"]["settings"].items()
+                if "buster" in v["path"]
+            ][0]
+            assert props["active_permissions"]
+        except TypeError:
+            secret = "mpbjkejclgfgadiemmefgebjfooflfhl"
+
+        unique_url = f"chrome-extension://{secret}/src/options/index.html"
         driver.get(unique_url)
         assert "Buster" in driver.page_source
         pingtest(driver)
@@ -76,14 +90,12 @@ def test_undetected_tor_browser(tmp_path):
 
 
 @pytest.mark.graphical
-def test_buster_undetected_browser(tmp_path, buster):
-    br = UndetectedBrowser(buster=buster)
-    with br as driver:
-        pingtest(driver)
+def test_buster_undetected_browser(tmp_path):
+    br = UndetectedBrowser(buster="tests/buster")
+    run_browser_test(br)
 
 
 @pytest.mark.graphical
-def test_buster_undetected_tor_browser(tmp_path, buster):
-    br = UndetectedTorBrowser(buster=buster)
-    with br as driver:
-        pingtest(driver)
+def test_buster_undetected_tor_browser(tmp_path):
+    br = UndetectedTorBrowser(buster="tests/buster")
+    run_browser_test(br)

@@ -2,9 +2,39 @@
 from pathlib import Path
 
 import undetected_chromedriver as uc
+import multiprocessing
 from selenium.webdriver.common.by import By
 
 from .browser import Browser, BrowserError, CaptchaChromeBase, TorBrowser
+
+# Monkeypatch undetected_chromedriver
+# I'd love to know why we have to use shell=True to connect properly...
+
+
+def _start_detached(executable, *args, writer: multiprocessing.Pipe = None):
+    kwargs = {}
+    if uc.dprocess.platform.system() == "Windows":
+        kwargs.update(
+            creationflags=uc.dprocess.DETACHED_PROCESS
+            | uc.dprocess.CREATE_NEW_PROCESS_GROUP
+        )
+    elif uc.dprocess.sys.version_info < (3, 2):
+        # assume posix
+        kwargs.update(preexec_fn=uc.dprocess.os.setsid)
+    else:  # Python 3.2+ and Unix
+        kwargs.update(start_new_session=True)
+
+    # run
+    cmdline = " ".join([executable, *args])
+    PIPE = uc.dprocess.PIPE
+    p = uc.dprocess.Popen(
+        cmdline, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True, **kwargs
+    )
+    writer.send(p.pid)
+    uc.sys.exit()
+
+
+uc.dprocess._start_detached = _start_detached
 
 
 class UndetectedCaptchaChrome(CaptchaChromeBase, uc.Chrome):
@@ -29,6 +59,11 @@ class UndetectedBrowser(Browser):
 
 
 class UndetectedTorBrowser(UndetectedBrowser, TorBrowser):
+    # def start_tor(self):
+    #     self._tor_port = 8897
+    def launch_chrome(self):
+        self.start_tor()
+
     @property
     def tor_arg(self):
         return f'--proxy-server="socks4://localhost:{self.tor_port}"'

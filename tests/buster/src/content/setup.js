@@ -1,0 +1,1 @@
+"use strict";function setup(){const a=new URL(chrome.extension.getURL("/src/setup/index.html"));a.searchParams.set("session",new URL(window.location.href).searchParams.get("session")),a.searchParams.set("port",window.location.port);const b=document.createElement("iframe");b.src=a.href,document.body.appendChild(b)}setup();
