@@ -1,9 +1,9 @@
 """Browser and CaptchaChrome objects based around `undetected_chromedriver`."""
+import multiprocessing
 from logging import getLogger
 from pathlib import Path
 
 import undetected_chromedriver as uc
-import multiprocessing
 from selenium.webdriver.common.by import By
 
 from .browser import Browser, BrowserError, CaptchaChromeBase, TorBrowser
