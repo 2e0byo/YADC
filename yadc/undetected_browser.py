@@ -61,7 +61,7 @@ class UndetectedBrowser(Browser):
             chrome_options.add_argument(self.buster_arg)
 
         kwargs = {"options": chrome_options, "browser_executable_path": self._chrome}
-        driver = UndetectedCaptchaChrome(options=chrome_options)
+        driver = UndetectedCaptchaChrome(**kwargs)
 
         driver.get(self._url)
         return driver
