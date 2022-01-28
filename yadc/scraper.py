@@ -66,6 +66,7 @@ class Scraper:
         notify: Callable = None,
         reserve: bool = True,
         short_notice: bool = True,
+        error_period: int = 30,
     ):
         self._browser = browser
         self.notify = notify or print
@@ -80,7 +81,7 @@ class Scraper:
         self.reserve = reserve
         self.short_notice = short_notice
         self.period = 5
-        self.error_period = 30
+        self.error_period = error_period
         self._search_counter = 0
         self.running = True
 
