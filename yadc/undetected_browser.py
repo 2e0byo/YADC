@@ -1,4 +1,5 @@
 """Browser and CaptchaChrome objects based around `undetected_chromedriver`."""
+from logging import getLogger
 from pathlib import Path
 
 import undetected_chromedriver as uc
@@ -6,6 +7,8 @@ import multiprocessing
 from selenium.webdriver.common.by import By
 
 from .browser import Browser, BrowserError, CaptchaChromeBase, TorBrowser
+
+logger = getLogger(__name__)
 
 # Monkeypatch undetected_chromedriver
 # I'd love to know why we have to use shell=True to connect properly...
@@ -26,6 +29,7 @@ def _start_detached(executable, *args, writer: multiprocessing.Pipe = None):
 
     # run
     cmdline = " ".join([executable, *args])
+    logger.debug(f"running chrome, cmdline is {cmdline}")
     PIPE = uc.dprocess.PIPE
     p = uc.dprocess.Popen(
         cmdline, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True, **kwargs
