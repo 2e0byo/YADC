@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.1 (2022-01-28)
+### Fix
+* **undetected_browser:** Actually use kwargs. ([`da28b8d`](https://github.com/2e0byo/YADC/commit/da28b8d6e9f046fa3ef1e076d87a5251116d2749))
+
 ## v0.7.0 (2022-01-28)
 ### Feature
 * **undetected_browser:** Print cmdline for debugging. ([`084bffe`](https://github.com/2e0byo/YADC/commit/084bffebbb196b3d9fbc2715b09a8d3ac8bb19b3))
