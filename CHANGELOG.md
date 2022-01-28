@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.7.0 (2022-01-28)
+### Feature
+* **undetected_browser:** Print cmdline for debugging. ([`084bffe`](https://github.com/2e0byo/YADC/commit/084bffebbb196b3d9fbc2715b09a8d3ac8bb19b3))
+
 ## v0.6.0 (2022-01-27)
 ### Feature
 * **browser:** Allow passing chrome path for windoze. ([`f67725f`](https://github.com/2e0byo/YADC/commit/f67725f8be6e0ba1acf719e972b4272f5f04903d))
