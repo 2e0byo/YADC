@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.0 (2022-01-29)
+### Feature
+* **browser:** Customisable error period. ([`dbb111d`](https://github.com/2e0byo/YADC/commit/dbb111d0434ba7793c0e9df7729e96dcb8368ab5))
+
 ## v0.7.1 (2022-01-28)
 ### Fix
 * **undetected_browser:** Actually use kwargs. ([`da28b8d`](https://github.com/2e0byo/YADC/commit/da28b8d6e9f046fa3ef1e076d87a5251116d2749))
