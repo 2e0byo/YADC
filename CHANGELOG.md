@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.11.0 (2022-01-29)
+### Feature
+* **browser:** Handle killing for dozy operating systems. ([`cc60e88`](https://github.com/2e0byo/YADC/commit/cc60e88f0226c93526ab2c7f5b3acea2c2b564fb))
+
+### Fix
+* **undetected_browser:** Make windoze path handling universal. ([`528e23d`](https://github.com/2e0byo/YADC/commit/528e23dfebfcdc6d05f08a2437072415c9badfdd))
+
 ## v0.10.0 (2022-01-29)
 ### Feature
 * **scraper:** Distribute sleeps properly. ([`7402f4f`](https://github.com/2e0byo/YADC/commit/7402f4fafc96459c6a9948f316cfee49abbd5503))
