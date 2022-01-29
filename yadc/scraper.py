@@ -435,12 +435,12 @@ class Scraper:
                             self.find_tests(browser, driver)
                             end = datetime.now()
                             period = self.time_to_next_event(elapsed=end - start)
-                            self._logger.debug(f"Sleeping for {period}")
-                            spinner_sleep(period)
+                            period = max(period - 5, 0)
+                            self._logger.debug(f"Sleeping for {period}s.")
                             self._logger.debug(
-                                f"Sleeping for ~10s to introduce some randomness."
+                                f"Sleeping for ~5s to introduce some randomness."
                             )
-                            randsleep(10)
+                            randsleep(5)
             except Exception as e:
                 errs.append(monotonic())
                 self._logger.exception(e)
