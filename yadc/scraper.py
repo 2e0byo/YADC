@@ -402,13 +402,14 @@ class Scraper:
 
         return None, None
 
-    def time_to_next_event(self) -> int:
+    def time_to_next_event(self, elapsed: dt.timedelta = None) -> int:
         """Time to sleep between runs.
 
         Returns:
             time (int): time in seconds.
         """
-        return self.period * 60
+        subtract = elapsed.seconds if elapsed else 0
+        return max(self.period * 60 - elapsed, 0)
 
     def __call__(self):
         while True:
@@ -430,8 +431,10 @@ class Scraper:
                 with self._browser as browser:
                     while self.running:
                         for driver in self.drivers:
+                            start = datetime.now()
                             self.find_tests(browser, driver)
-                            period = self.time_to_next_event()
+                            end = datetime.now()
+                            period = self.time_to_next_event(elapsed=end - start)
                             self._logger.debug(f"Sleeping for {period}")
                             spinner_sleep(period)
                             self._logger.debug(
