@@ -84,6 +84,23 @@ class Scraper:
         self.error_period = error_period
         self._search_counter = 0
         self.running = True
+        """A Scraper which finds tests for us.
+
+        Args:
+            browser (Browser): the browser we use to do the scraping.
+
+            drivers (list[Driver]): the drivers to find tests for.
+
+            notify (callable): the function to call when we find something.  If
+                               unset we use `print`, so you should set this.
+                               Receives one argument, a str. (default=None)
+
+            reserve (bool): whether to reserve a test if we find it. (default=True)
+
+            short_notice (bool): whether to consider short notice tests. (default=True)
+
+            error_period (int): time in seconds to sleep when we have an error (default=30).
+        """
 
     def dvsa_disabled(self):
         return datetime.now() < datetime.combine(
