@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.8.1 (2022-01-29)
+### Fix
+* **browser:** Catch when the captcha has gone. ([`9ef3ab7`](https://github.com/2e0byo/YADC/commit/9ef3ab71bd144fb37850d51a1c140d075803d44b))
+
+### Documentation
+* **scraper:** Add docs for scraper. ([`1834ffc`](https://github.com/2e0byo/YADC/commit/1834ffc99ec9b88182ed26292895aecddf334c5d))
+
 ## v0.8.0 (2022-01-29)
 ### Feature
 * **browser:** Customisable error period. ([`dbb111d`](https://github.com/2e0byo/YADC/commit/dbb111d0434ba7793c0e9df7729e96dcb8368ab5))
