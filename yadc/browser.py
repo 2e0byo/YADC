@@ -36,6 +36,9 @@ class CaptchaChromeBase:
         super().__init__(*args, **kwargs)
 
     def solve_captcha(self) -> bool:
+        if self.INCAPSULA not in self.page_source:
+            return True
+
         self.switch_to.default_content()
         iframe = self.find_element(value="main-iframe", bypass=False)
         self.switch_to.frame(iframe)
