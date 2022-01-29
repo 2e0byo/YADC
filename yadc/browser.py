@@ -243,11 +243,15 @@ class Browser:
         return f"--remote-debugging-port={self.port}"
 
     def kill(self, proc, name):
-        self._logger.info(f"Killing {name}")
         if not proc:
             return
+        self._logger.info(f"Killing {name}")
 
-        sysproc = Process(proc.pid)
+        if isinstance(proc, int):
+            sysproc = Process(proc)
+        else:
+            sysproc = Process(proc.pid)
+
         for child in sysproc.children(recursive=True):
             try:
                 child.terminate()
@@ -259,6 +263,9 @@ class Browser:
                 child.kill()
             except Exception:
                 pass
+
+        if isinstance(proc, int):
+            return
 
         proc.terminate()
         proc.wait(2)
@@ -355,12 +362,12 @@ class Browser:
                 self._dump(exc_type, exc_val, exc_tb)
             except Exception as e:
                 tb.print_exc()
+        self.kill(self._proc, "Chrome")
         try:
             self._driver.quit()
         except Exception:
             pass
 
-        self.kill(self._proc, "Chrome")
         try:
             self._profile_dir.cleanup()
         except Exception as e:

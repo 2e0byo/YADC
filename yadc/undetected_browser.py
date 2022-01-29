@@ -64,6 +64,7 @@ class UndetectedBrowser(Browser):
 
         kwargs = {"options": chrome_options, "browser_executable_path": self._chrome}
         driver = UndetectedCaptchaChrome(**kwargs)
+        self._proc = uc.dprocess.REGISTERED[-1]
 
         driver.get(self._url)
         return driver
