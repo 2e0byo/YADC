@@ -437,6 +437,7 @@ class Scraper:
                             period = self.time_to_next_event(elapsed=end - start)
                             period = max(period - 5, 0)
                             self._logger.debug(f"Sleeping for {period}s.")
+                            spinner_sleep(period)
                             self._logger.debug(
                                 f"Sleeping for ~5s to introduce some randomness."
                             )
