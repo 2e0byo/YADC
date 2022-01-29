@@ -26,6 +26,7 @@ class CaptchaChromeBase:
     BLOCKED = "Access denied"
     SUSPICIOUS = "Pardon our interruption"
     CAPTCHA_ATTEMPTS = 4
+    LONG_SLEEP = 60
     instances = []
 
     def __init__(self, *args, **kwargs):
@@ -84,7 +85,6 @@ class CaptchaChromeBase:
     def bypass(self):
         """Try to bypass security."""
 
-        solved = False
         if any(x in self.page_source for x in (self.BLOCKED, self.SUSPICIOUS)):
             self._logger.error("Blocked")
             raise BrowserError("Blocked")
@@ -101,22 +101,23 @@ class CaptchaChromeBase:
                     randsleep(5)
                     self.refresh()
                 else:
-                    solved = True
+                    break
 
                 if self.INCAPSULA in self.page_source:
                     randsleep(2)
                     self.solve_captcha()
                 else:
-                    solved = True
+                    break
 
                 if self.INCAPSULA in self.page_source:
-                    randsleep(150)
+                    self._logger.debug("Long sleep as incapsula still in page source.")
+                    randsleep(self.LONG_SLEEP)
                 else:
-                    solved = True
+                    break
         else:
             return
 
-        if solved:
+        if not self.INCAPSULA in self.page_source:
             self._logger.info("Solved Captcha!")
         else:
             self._logger.error("Unable to beat Captcha")
