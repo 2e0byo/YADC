@@ -26,6 +26,8 @@ class CaptchaChromeBase:
     BLOCKED = "Access denied"
     SUSPICIOUS = "Pardon our interruption"
     CAPTCHA_ATTEMPTS = 4
+    WAIT_MSG = "Please wait while we process your request"
+    MAX_WAIT = 60
     LONG_SLEEP = 60
     instances = []
 
@@ -123,9 +125,21 @@ class CaptchaChromeBase:
             self._logger.error("Unable to beat Captcha")
             raise BrowserError("Unable to beat Captcha")
 
-    def find_element(self, by=None, value=None, bypass=True):
+    def wait(self):
+        waited = 0
+        self._logger.debug("Waiting as page is not ready yet.")
+        if self.WAIT_MSG in self._driver.page_source() and waited < self.MAX_WAIT:
+            sleep(1)
+            waited += 1
+        if self.WAIT_MSG in self._driver.page_source():
+            raise BrowserError(f"Page failed to load within {self.MAX_WAIT} s")
+
+    def find_element(self, by=None, value=None, bypass=True, wait=True):
         if bypass:
             self.bypass()
+        if wait:
+            self.wait()
+
         args = dict(by=by, value=value)
         return super().find_element(**{k: v for k, v in args.items() if v})
 
