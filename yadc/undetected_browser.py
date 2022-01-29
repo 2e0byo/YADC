@@ -28,6 +28,8 @@ def _start_detached(executable, *args, writer: multiprocessing.Pipe = None):
         kwargs.update(start_new_session=True)
 
     # run
+    if not executable.startswith('"'):
+        executable = f'"{executable}"'
     cmdline = " ".join([executable, *args])
     logger.debug(f"running chrome, cmdline is {cmdline}")
     PIPE = uc.dprocess.PIPE
