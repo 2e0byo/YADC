@@ -87,6 +87,7 @@ class CaptchaChromeBase:
     def bypass(self):
         """Try to bypass security."""
 
+        solved = False
         if any(x in self.page_source for x in (self.BLOCKED, self.SUSPICIOUS)):
             self._logger.error("Blocked")
             raise BrowserError("Blocked")
@@ -103,23 +104,23 @@ class CaptchaChromeBase:
                     randsleep(5)
                     self.refresh()
                 else:
-                    break
+                    solved = True
 
                 if self.INCAPSULA in self.page_source:
                     randsleep(2)
                     self.solve_captcha()
                 else:
-                    break
+                    solved = True
 
                 if self.INCAPSULA in self.page_source:
                     self._logger.debug("Long sleep as incapsula still in page source.")
                     randsleep(self.LONG_SLEEP)
                 else:
-                    break
+                    solved = True
         else:
             return
 
-        if not self.INCAPSULA in self.page_source:
+        if solved:
             self._logger.info("Solved Captcha!")
         else:
             self._logger.error("Unable to beat Captcha")
