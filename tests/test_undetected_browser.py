@@ -1,9 +1,13 @@
 import shutil
 from json import load
 from pathlib import Path
+from time import sleep
+from functools import partial
 
+import psutil
 import pytest
 from selenium.webdriver.common.by import By
+from undetected_chromedriver import dprocess
 from yadc.undetected_browser import (
     ManualBusterUndetectedBrowser,
     ManualBusterUndetectedTorBrowser,
@@ -17,26 +21,47 @@ def pingtest(driver):
     assert "Google Search" in driver.page_source
 
 
-def run_browser_test(browser):
-    unique_url = "chrome-extension://src/options/index.html"
+def _run_browser_test(fn, browser):
     with browser as driver:
+        pid = psutil.Process(dprocess.REGISTERED[-1])
+        assert pid.status() in ("running", "sleeping")
+        fn(driver)
 
-        try:
-            with Path(driver.user_data_dir, "Default/Preferences").open() as f:
-                data = load(f)
-            secret, props = [
-                (k, v)
-                for k, v in data["extensions"]["settings"].items()
-                if "buster" in v["path"]
-            ][0]
-            assert props["active_permissions"]
-        except TypeError:
-            secret = "mpbjkejclgfgadiemmefgebjfooflfhl"
+    try:
+        count = 0
+        while pid.status() and count < 10:
+            sleep(1)
+    except Exception:
+        pass
 
-        unique_url = f"chrome-extension://{secret}/src/options/index.html"
-        driver.get(unique_url)
-        assert "Buster" in driver.page_source
-        pingtest(driver)
+    with pytest.raises(psutil.NoSuchProcess):
+        pid.status()
+
+
+run_pingtest = partial(_run_browser_test, pingtest)
+
+
+def bustertest(driver):
+    unique_url = "chrome-extension://src/options/index.html"
+    try:
+        with Path(driver.user_data_dir, "Default/Preferences").open() as f:
+            data = load(f)
+        secret, props = [
+            (k, v)
+            for k, v in data["extensions"]["settings"].items()
+            if "buster" in v["path"]
+        ][0]
+        assert props["active_permissions"]
+    except TypeError:
+        secret = "mpbjkejclgfgadiemmefgebjfooflfhl"
+
+    unique_url = f"chrome-extension://{secret}/src/options/index.html"
+    driver.get(unique_url)
+    assert "Buster" in driver.page_source
+    pingtest(driver)
+
+
+run_browser_test = partial(_run_browser_test, bustertest)
 
 
 @pytest.mark.graphical
@@ -78,15 +103,13 @@ def test_automated_manual_buster_undetected_tor_browser(tmp_path, tor):
 @pytest.mark.graphical
 def test_undetected_browser(tmp_path):
     br = UndetectedBrowser()
-    with br as driver:
-        pingtest(driver)
+    run_pingtest(br)
 
 
 @pytest.mark.graphical
 def test_undetected_tor_browser(tmp_path, tor):
     br = UndetectedTorBrowser(tor=tor)
-    with br as driver:
-        pingtest(driver)
+    run_pingtest(br)
 
 
 @pytest.mark.graphical
