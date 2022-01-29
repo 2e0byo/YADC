@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v0.10.0 (2022-01-29)
+### Feature
+* **scraper:** Distribute sleeps properly. ([`7402f4f`](https://github.com/2e0byo/YADC/commit/7402f4fafc96459c6a9948f316cfee49abbd5503))
+* **browser:** Handle the 'please wait' page which sometimes occurs. ([`9ed5618`](https://github.com/2e0byo/YADC/commit/9ed561826dcc3bdd7fd00662c20e832bb7ea6807))
+* **browser:** Improve captcha handling. ([`b0a170e`](https://github.com/2e0byo/YADC/commit/b0a170ec640986a1e09136e77d8f7c64dfbd7e3c))
+
+### Fix
+* **scraper:** Actually sleep ([`2835717`](https://github.com/2e0byo/YADC/commit/28357172e52503d9812e8de317af092958858681))
+* **browser:** Revert part of incapsula handling. ([`e7eb12b`](https://github.com/2e0byo/YADC/commit/e7eb12b92df847133c66a1fd5290c5fa7e4f71b4))
+* **browser:** Wait. ([`6873228`](https://github.com/2e0byo/YADC/commit/6873228c6a7a9605b480198209f89b6c03afe3c4))
+
 ## v0.9.0 (2022-01-29)
 ### Feature
 * **scraper:** Take time of current run into account in period. ([`8323a12`](https://github.com/2e0byo/YADC/commit/8323a1222b19f15176169bfce4cd6a618a0a4df7))
