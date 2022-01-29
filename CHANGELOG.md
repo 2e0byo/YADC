@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.9.0 (2022-01-29)
+### Feature
+* **scraper:** Take time of current run into account in period. ([`8323a12`](https://github.com/2e0byo/YADC/commit/8323a1222b19f15176169bfce4cd6a618a0a4df7))
+
 ## v0.8.1 (2022-01-29)
 ### Fix
 * **browser:** Catch when the captcha has gone. ([`9ef3ab7`](https://github.com/2e0byo/YADC/commit/9ef3ab71bd144fb37850d51a1c140d075803d44b))
