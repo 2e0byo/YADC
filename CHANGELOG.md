@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.12.0 (2022-01-31)
+### Feature
+* **scraper:** Add count log. ([`63c3637`](https://github.com/2e0byo/YADC/commit/63c36375bb54f0ee6211abf13fb2af96fa7bf33e))
+
 ## v0.11.0 (2022-01-29)
 ### Feature
 * **browser:** Handle killing for dozy operating systems. ([`cc60e88`](https://github.com/2e0byo/YADC/commit/cc60e88f0226c93526ab2c7f5b3acea2c2b564fb))
