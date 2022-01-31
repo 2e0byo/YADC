@@ -411,6 +411,10 @@ class Scraper:
         subtract = elapsed.seconds if elapsed else 0
         return max(self.period * 60 - elapsed, 0)
 
+    def error_callback(self):
+        """Run something when we have an error."""
+        pass
+
     def __call__(self):
         while True:
             self._logger.info("Starting search loop")
@@ -452,6 +456,7 @@ class Scraper:
                 errored += 1
                 errs.append(monotonic())
                 self._logger.exception(e)
+                self.error_callback()
                 randsleep(self.error_period)
 
             if len(errs) == 5 and errs[-1] - errs[0] < 10 * 60:
