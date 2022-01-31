@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.0 (2022-01-31)
+### Feature
+* **scraper:** Add error_callback. ([`670f623`](https://github.com/2e0byo/YADC/commit/670f62316d7ed99f18fd12c91d2706614d74b1a0))
+
 ## v0.12.0 (2022-01-31)
 ### Feature
 * **scraper:** Add count log. ([`63c3637`](https://github.com/2e0byo/YADC/commit/63c36375bb54f0ee6211abf13fb2af96fa7bf33e))
