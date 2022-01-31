@@ -426,12 +426,17 @@ class Scraper:
 
             printed = False
             errs = deque([], maxlen=5)
+            searched, errored = 0, 0
 
             try:
                 with self._browser as browser:
                     while self.running:
                         for driver in self.drivers:
                             start = datetime.now()
+                            self._logger.info(
+                                f"Finding tests for driver {driver.name} "
+                                f"run {searched +1}, of which {errored} errored."
+                            )
                             self.find_tests(browser, driver)
                             end = datetime.now()
                             period = self.time_to_next_event(elapsed=end - start)
@@ -442,7 +447,9 @@ class Scraper:
                                 f"Sleeping for ~5s to introduce some randomness."
                             )
                             randsleep(5)
+                            searched += 1
             except Exception as e:
+                errored += 1
                 errs.append(monotonic())
                 self._logger.exception(e)
                 randsleep(self.error_period)
