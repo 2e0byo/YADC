@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.13.1 (2022-01-31)
+### Fix
+* **browser:** Typo if -> while ([`ba9938a`](https://github.com/2e0byo/YADC/commit/ba9938a166821cdda5fee97fce7d86efaa36c30e))
+
 ## v0.13.0 (2022-01-31)
 ### Feature
 * **scraper:** Add error_callback. ([`670f623`](https://github.com/2e0byo/YADC/commit/670f62316d7ed99f18fd12c91d2706614d74b1a0))
