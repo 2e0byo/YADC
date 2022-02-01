@@ -6,6 +6,7 @@ from pathlib import Path
 from subprocess import PIPE, Popen
 from tempfile import TemporaryDirectory
 from typing import Union
+from time import sleep
 
 from fake_useragent import UserAgent
 from psutil import Process
