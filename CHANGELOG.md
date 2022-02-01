@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.0 (2022-02-01)
+### Feature
+* **scraper:** Factor out loop sleep. ([`bd6da75`](https://github.com/2e0byo/YADC/commit/bd6da756e384b05ae43e4514fe1a4943401a954b))
+
 ## v0.13.1 (2022-01-31)
 ### Fix
 * **browser:** Typo if -> while ([`ba9938a`](https://github.com/2e0byo/YADC/commit/ba9938a166821cdda5fee97fce7d86efaa36c30e))
