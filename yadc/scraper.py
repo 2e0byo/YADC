@@ -415,6 +415,15 @@ class Scraper:
         """Run something when we have an error."""
         pass
 
+    def loop_sleep(self, period):
+        """Sleep fn for main loop."""
+        period = max(period - 5, 0)
+        self._logger.debug(f"Sleeping for ~{period}s.")
+        if period:
+            randsleep(period, period + 45)
+        self._logger.debug(f"Sleeping for ~5s to introduce some randomness.")
+        randsleep(5)
+
     def __call__(self):
         while True:
             self._logger.info("Starting search loop")
@@ -444,13 +453,7 @@ class Scraper:
                             self.find_tests(browser, driver)
                             end = datetime.now()
                             period = self.time_to_next_event(elapsed=end - start)
-                            period = max(period - 5, 0)
-                            self._logger.debug(f"Sleeping for {period}s.")
-                            spinner_sleep(period)
-                            self._logger.debug(
-                                f"Sleeping for ~5s to introduce some randomness."
-                            )
-                            randsleep(5)
+                            self.loop_sleep(period)
                             searched += 1
             except Exception as e:
                 errored += 1
