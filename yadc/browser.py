@@ -224,7 +224,7 @@ class Browser:
         else:
             self._errors_dir = Path(f"./errors/{self.name}")
         self.dump_on_error = dump_on_error
-        if register_sigusr1:
+        if register_sigusr1 and hasattr(signal, "SIGUSR1"):
             signal.signal(signal.SIGUSR1, self._signal_handler)
             self._logger.debug(
                 "Registered signal handler; send sigusr1 to get control."
