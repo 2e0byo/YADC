@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.14.1 (2022-02-01)
+### Fix
+* **browser:** We hadn't imported sleep! ([`eb39d43`](https://github.com/2e0byo/YADC/commit/eb39d4301932ce3831d043b7ac1621b152b0e26a))
+
 ## v0.14.0 (2022-02-01)
 ### Feature
 * **scraper:** Factor out loop sleep. ([`bd6da75`](https://github.com/2e0byo/YADC/commit/bd6da756e384b05ae43e4514fe1a4943401a954b))
