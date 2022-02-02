@@ -1,3 +1,4 @@
+import signal
 import socketserver
 import traceback as tb
 from datetime import datetime
@@ -17,6 +18,10 @@ from .humanlike import randsleep
 
 
 class BrowserError(Exception):
+    pass
+
+
+class ControlBrowserException(Exception):
     pass
 
 
@@ -171,6 +176,7 @@ class Browser:
         url: str = None,
         errors_dir: Union[Path, str] = None,
         dump_on_error: bool = True,
+        register_sigusr1: bool = True,
     ):
         """Setup the Browser.
 
@@ -191,6 +197,11 @@ class Browser:
 
             dump_on_error (bool): whether to save error dumps for debugging.
                                   (Default: True)
+
+            register_sigusr1: bool = True: whether to register a handler for
+                                           sigusr1 which calls
+                                           `self.control_browser()` (Default:
+                                           True).
         """
         self._installed = False
         self._port = port
@@ -213,6 +224,11 @@ class Browser:
         else:
             self._errors_dir = Path(f"./errors/{self.name}")
         self.dump_on_error = dump_on_error
+        if register_sigusr1:
+            signal.signal(signal.SIGUSR1, self._signal_handler)
+            self._logger.debug(
+                "Registered signal handler; send sigusr1 to get control."
+            )
 
     @staticmethod
     def validate_buster(buster: Path):
@@ -242,6 +258,15 @@ class Browser:
     @property
     def port_arg(self) -> str:
         return f"--remote-debugging-port={self.port}"
+
+    def control_browser(self):
+        """Take control of the browser for manual use.
+
+        This cannot be undone and the browser will die when finished."""
+        raise ControlBrowserException("User requested manual control.")
+
+    def _signal_handler(self, sig, frame):
+        self.control_browser()
 
     def kill(self, proc, name):
         if not proc:
@@ -358,6 +383,8 @@ class Browser:
         self._logger.info(f"Saved error dump in {outf}")
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type is ControlBrowserException:
+            input("Press enter to exit.")
         if exc_val and self.dump_on_error:
             try:
                 self._dump(exc_type, exc_val, exc_tb)

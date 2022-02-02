@@ -1,4 +1,4 @@
-from yadc.browser import Browser, TorBrowser
+from yadc.browser import Browser, TorBrowser, ControlBrowserException
 import pytest
 
 
@@ -28,3 +28,13 @@ def test_dump_errors(mocker, tmp_path):
         assert msg in f.read()
 
     assert len(list(tmp_path.glob("*.html"))) == 1
+
+
+@pytest.mark.graphical
+def test_take_control(mocker, chrome, chromedriver):
+    mocked_input = mocker.patch("yadc.browser.input")
+    with pytest.raises(ControlBrowserException):
+        b = Browser(chrome=chrome, chromedriver=chromedriver)
+        with b as driver:
+            b.control_browser()
+    mocked_input.assert_called_once_with("Press enter to exit.")
