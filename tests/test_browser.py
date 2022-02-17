@@ -1,5 +1,8 @@
-from yadc.browser import Browser, TorBrowser, ControlBrowserException
+from pathlib import Path
+
 import pytest
+from selenium.webdriver.common.by import By
+from yadc.browser import Browser, ControlBrowserException, TorBrowser, BrowserError
 
 
 def run_test_browser(b):
@@ -38,3 +41,16 @@ def test_take_control(mocker, chrome, chromedriver):
         with b as driver:
             b.control_browser()
     mocked_input.assert_called_once_with("Press enter to exit.")
+
+
+def page(pg):
+    return f"file://{Path(__file__).parent}/pages/{pg}"
+
+
+@pytest.mark.graphical
+def test_wait_fail(chrome, chromedriver):
+    b = Browser(chrome=chrome, chromedriver=chromedriver)
+    with b as driver:
+        driver.get(page("wait-page.html"))
+        with pytest.raises(BrowserError, match="Page failed to load"):
+            driver.find_element(By.ID, "no-such-element")
