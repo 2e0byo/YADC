@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "yadc"
-version = "0.14.1"
+version = "0.15.0"
 description = "Yet Another DVSA Cancellation checker"
 authors = ["John Maximilian <2e0byo@gmail.com>"]
 license = "MIT"

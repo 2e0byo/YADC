@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.15.0 (2022-02-02)
+### Feature
+* **browser:** Enable taking control of browser (terminally). ([`064e2dd`](https://github.com/2e0byo/YADC/commit/064e2dd53a1c4d6ef3d0beeb6227e7fdf82efd71))
+
+### Fix
+* **browser:** Handle windoze... ([`9646633`](https://github.com/2e0byo/YADC/commit/96466335f0550cf53f0c43998d963683cc5c09d3))
+
 ## v0.14.1 (2022-02-01)
 ### Fix
 * **browser:** We hadn't imported sleep! ([`eb39d43`](https://github.com/2e0byo/YADC/commit/eb39d4301932ce3831d043b7ac1621b152b0e26a))
