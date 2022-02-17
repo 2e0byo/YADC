@@ -136,11 +136,13 @@ class CaptchaChromeBase:
         waited = 0
         if self.WAIT_MSG in self.page_source:
             self._logger.debug("Waiting as page is not ready yet.")
-        while self.WAIT_MSG in self.page_source and waited < self.MAX_WAIT:
-            sleep(1)
-            waited += 1
-        if self.WAIT_MSG in self.page_source:
-            raise BrowserError(f"Page failed to load within {self.MAX_WAIT} s")
+            while self.WAIT_MSG in self.page_source and waited < self.MAX_WAIT:
+                sleep(1)
+                waited += 1
+            if self.WAIT_MSG in self.page_source:
+                raise BrowserError(f"Page failed to load within {self.MAX_WAIT} s")
+        else:
+            self._logger.debug("No need to wait for page.")
 
     def find_element(self, by=None, value=None, bypass=True, wait=True):
         if bypass:
