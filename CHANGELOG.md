@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.16.0 (2022-02-17)
+### Feature
+* **browser:** Even more explicit logging. ([`98cde22`](https://github.com/2e0byo/YADC/commit/98cde22e04de8e829359f9cd7c994e89b4f71385))
+
+### Fix
+* **browser:** Only log when we actually wait. ([`48894fb`](https://github.com/2e0byo/YADC/commit/48894fb576e5d0e75bea3107ed5ad2d60ccdd161))
+
 ## v0.15.0 (2022-02-02)
 ### Feature
 * **browser:** Enable taking control of browser (terminally). ([`064e2dd`](https://github.com/2e0byo/YADC/commit/064e2dd53a1c4d6ef3d0beeb6227e7fdf82efd71))
