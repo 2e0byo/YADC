@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.16.1 (2022-03-03)
+### Fix
+* Use subtract not elapsed, fixes #8. ([`418e20c`](https://github.com/2e0byo/YADC/commit/418e20c0ce73010eb7d831bf8e2b0213bb3b6924))
+
+### Documentation
+* Add note re tor. ([`10ac0b6`](https://github.com/2e0byo/YADC/commit/10ac0b6c2ad8beab925ae7a4a702550fffdc5044))
+
 ## v0.16.0 (2022-02-17)
 ### Feature
 * **browser:** Even more explicit logging. ([`98cde22`](https://github.com/2e0byo/YADC/commit/98cde22e04de8e829359f9cd7c994e89b4f71385))
