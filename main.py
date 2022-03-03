@@ -34,6 +34,7 @@ s = Scraper(
     TorBrowser(
         buster=Path("buster"),
         chrome="chromium",
+        tor=Path("/path/to/tor"),  # probably not needed on *nix
     ),
     [driver],
     notify=notify,
