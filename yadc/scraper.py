@@ -409,7 +409,7 @@ class Scraper:
             time (int): time in seconds.
         """
         subtract = elapsed.seconds if elapsed else 0
-        return max(self.period * 60 - elapsed, 0)
+        return max(self.period * 60 - subtract, 0)
 
     def error_callback(self):
         """Run something when we have an error."""
