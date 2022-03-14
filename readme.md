@@ -72,12 +72,46 @@ needs to be installed and executable as the user running your \`main.py\`.
 -   edit `main.py` with your setup.
 -   run `python -m yadc.main`
 
+# FAQ
+
+- **Chrome/Chromedriver/Tor doesn't start!** You need to provide either the
+  *complete* path to the executable (that's something like
+  `"/usr/bin/chromedriver"` or `r"C:\Program Files\Chrome\chrome.exe ""`)
+  *including any suffix it might have*; or you need to make sure that the
+  executables are in your `$PATH` / `%PATH%`.  Have a look in `main.py` to see
+  where they should go. Windows users: I'm very sorry your operating system
+  makes this so difficult, it wasn't me who decided to put a *space* in the path
+  to further confuse things.
+  
+- **Tor doesn't connect to the internet.**  This is *probably* a bug in your
+  environment *if* you have correctly passed the tor executable.  If you
+  haven't, do so.  Verify that one and only one tor process is running (for some
+  reason multiple tor processes will fail on Windows at least), using Task
+  Manager (Micro$oft Windoze) or `pkill` (*nix) to stop any which are left over
+  by mistake.  If you can't get it working, try manually: start tor with
+  `/path/to/tor --SocksPort 48059` and then start chrome with `/path/to/chrome
+  --proxy-server="socks4://localhost:48059"`.  If this fails the problem is in
+  your installation: if it succeeds and you can't get it running, open an issue
+  and I'll have a look at it.  Note that this code has been confirmed working on
+  both Windows and Linux in the past, but it is not in active development, and
+  it's possible things have broken since.
+  
+- **I don't know where to start!** If you can't make sense of the instructions
+  in this readme, open an issue and explain what's confusing.  That way I can
+  improve the readme :D
+
+- **I got this error when it was running!**  Note that errors when running are
+  perfectly normal.  YADC gets detected eventually; sooner or later it will
+  probably stop working entirely.  See my appeal to the DVSA below.  If you want
+  to open an issue with the error, make sure you include the error dump from the
+  errors dir (the `.txt`, the `.html`, and the `.png`).  You are strongly
+  advised to sanitise the files *first* in case they contain personal data.
 
 # Usage
 
 Currently you have to be at the computer to do anything.  You will see the
 browser moving, which should help.  If you want to interact with it manually,
-hit \`Ctrl-z\` in the terminal to stop execution of the script, and the browser
+hit `Ctrl-z` in the terminal to stop execution of the script, and the browser
 is yours (note that manual interaction increases the chance of being detected
 by some anti-bot measures).  If the script finds a test it will notify you
 with the notify function you set (the default is just \`print\`, so do set
