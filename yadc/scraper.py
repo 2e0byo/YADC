@@ -259,7 +259,6 @@ class Scraper:
             self._logger.info("No tests in required range.")
             return back
 
-        self.notify(f"Test found at {centre} on {day}")
         if self.reserve:
             slot = self._reserve_test(browser, day, centre, el)
             if slot:
@@ -267,6 +266,7 @@ class Scraper:
             else:
                 self._logger.info("Failed to reserve test...")
         else:
+            self.notify(f"Test found at {centre} on {day}")
             input("Deal with test; press enter when done.")
         return back
 
