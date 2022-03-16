@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.16.2 (2022-03-16)
+### Fix
+* Only notify once. ([`28cb7f5`](https://github.com/2e0byo/YADC/commit/28cb7f50cb440dba520501e4c82cbe755c78b409))
+
+### Documentation
+* Add FAQ. ([`86502ae`](https://github.com/2e0byo/YADC/commit/86502ae88c147975b06ad091ab399b01a1cef9a0))
+
 ## v0.16.1 (2022-03-03)
 ### Fix
 * Use subtract not elapsed, fixes #8. ([`418e20c`](https://github.com/2e0byo/YADC/commit/418e20c0ce73010eb7d831bf8e2b0213bb3b6924))
