@@ -23,14 +23,35 @@ class Test(BaseModel):
 
 
 class Centre(BaseModel):
-    """A centre and optional before date."""
+    """A centre and optional dates.
+
+    If dates are not supplied, the defaults from the `Driver()` are used.
+
+    Args:
+        centre (str): the centre name.
+        not_before (datetime): tests must not be before this date. (Default=None)
+        not_after (datetime): tests must not be after this date. (Default=None)
+
+    """
 
     centre: str
-    date: datetime = None
+    not_before: datetime = None
+    not_after: datetime = None
 
 
 class Driver(BaseModel):
-    "A driver seeking a driving test."
+    """A driver seeking a driving test.
+
+    Args:
+        licence_number (str): the driver's licence number.
+        name (str): the driver's name.
+        booking_ref (str): the driver's booking reference.
+        centres (list[Centre]): the centres to search.
+        not_before (datetime): do not consider tests before this date.
+        not_after (datetime): do not consider tests after this date.
+        disabled_dates: (list[datetime]): ignore tests on these dates.  (Default=None)
+    """
+
     licence_number: str
     name: str
     booking_ref: str
@@ -186,11 +207,12 @@ class Scraper:
             f"Current Booking for {driver.name} is on "
             f"{current_test_date} in {current_centre}"
         )
-        self._logger.debug(
-            f"Looking for dates for {driver.name} between "
-            f"{driver.not_before} and {driver.not_after}"
-        )
         for centre in driver.centres:
+            self._logger.debug(
+                f"Looking for dates for {driver.name} between "
+                f"{centre.not_before or driver.not_before} and "
+                f"{centre.not_after or driver.not_after}"
+            )
             # wait for a bit so we don't look too automated.
             randsleep(1.5)
 
@@ -387,16 +409,24 @@ class Scraper:
             a = day.find_element(By.XPATH, ".//a")
             date = datetime.strptime(a.get_attribute("data-date"), "%Y-%m-%d")
 
-            # note that we cannot find multiple tests on the same day
-            # this could be fixed, quite easily
-            before_date = centre.date or driver.current_test.date
-            if date.date() >= before_date.date():
-                continue
             if driver.disabled_dates and date in driver.disabled_dates:
                 continue
-            elif date < driver.not_before:
+
+            not_before = centre.not_before or driver.not_before
+            if date < before:
                 continue
-            elif date > driver.not_after:
+
+            # prevent it finding a test before the current test if the current
+            # test is in the required window.
+            if driver.current_test.date > not_before:
+
+                # We probably don't care to move back test by test on the same day,
+                # so we only accept tests on at least the day before.
+                if date.date() >= driver.current_test.date.date():
+                    continue
+
+            not_after = centre.not_after or driver.not_after
+            if date > not_after:
                 continue
             return date, a
 

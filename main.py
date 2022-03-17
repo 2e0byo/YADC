@@ -24,7 +24,7 @@ driver = Driver(
     not_after=datetime(2022, 3, 1),
     name="",
     centres=[
-        Centre(centre="Gateshead", before=datetime(2022, 1, 1)),
+        Centre(centre="Gateshead", not_after=datetime(2022, 1, 1)),
         Centre(centre="Durham"),
     ],
 )
