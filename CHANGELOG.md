@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.16.3 (2022-03-17)
+### Fix
+* **scraper:** Correct centre logic and allow searching after current ([`1c4d65b`](https://github.com/2e0byo/YADC/commit/1c4d65b30a7394cf3904486df96ca857f9228ba2))
+
 ## v0.16.2 (2022-03-16)
 ### Fix
 * Only notify once. ([`28cb7f5`](https://github.com/2e0byo/YADC/commit/28cb7f50cb440dba520501e4c82cbe755c78b409))
