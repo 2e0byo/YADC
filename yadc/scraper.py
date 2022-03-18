@@ -413,7 +413,7 @@ class Scraper:
                 continue
 
             not_before = centre.not_before or driver.not_before
-            if date < before:
+            if date < not_before:
                 continue
 
             # prevent it finding a test before the current test if the current
