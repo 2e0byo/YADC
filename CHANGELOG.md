@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.17.0 (2022-03-18)
+### Fix
+* **scraper:** Type before -> not_before. ([`2850ecb`](https://github.com/2e0byo/YADC/commit/2850ecb1ca48804d4cfee3e1d47d36612a4d2261))
+
 ## v0.16.4 (2022-03-18)
 ### Fix
 * **scraper:** Type before -> not_before. ([`2850ecb`](https://github.com/2e0byo/YADC/commit/2850ecb1ca48804d4cfee3e1d47d36612a4d2261))
