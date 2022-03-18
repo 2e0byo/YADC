@@ -293,9 +293,13 @@ class Scraper:
         return back
 
     @staticmethod
-    def correct_month_showing(browser: Chrome, day: datetime):
+    def days_to_correct_month(browser: Chrome, day: datetime) -> int:
         el = browser.find_element(By.CLASS_NAME, "BookingCalendar-currentMonth")
-        return day.strftime("%B") in el.get_attribute("innerHTML")
+        month = el.get_attribute("innerHTML")
+        el = browser.find_element(By.CLASS_NAME, "BookingCalendar-currentYear")
+        year = el.get_attribute("innerHTML")
+        showing = datetime.strptime(f"{month} {year}", "%B %Y")
+        return (showing - datetime(day.year, day.month, 1)).days
 
     def _reserve_test(self, browser: Chrome, day: datetime, centre: str, el) -> bool:
         """Reserve a test.  **UNTESTED**"""
@@ -305,11 +309,18 @@ class Scraper:
 
         # scroll to correct month
         attempts = 0
-        while not self.correct_month_showing(browser, day):
+        while self.days_to_correct_month(browser, day) < 0:
             browser.find_element(By.CLASS_NAME, "BookingCalendar-nav--prev").click()
             attempts += 1
             if attempts > 12:
-                raise BookingError("Failed to find correct month.")
+                raise BookingError("Failed to find correct month by going backwards.")
+
+        attempts = 0
+        while self.days_to_correct_month(browser, day) > 0:
+            browser.find_element(By.CLASS_NAME, "BookingCalendar-nav--next").click()
+            attempts += 1
+            if attempts > 12:
+                raise BookingError("Failed to find correct month by going forwards.")
 
         # click on date.
         el.click()
