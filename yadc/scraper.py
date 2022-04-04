@@ -309,14 +309,14 @@ class Scraper:
 
         # scroll to correct month
         attempts = 0
-        while self.days_to_correct_month(browser, day) < 0:
+        while self.days_to_correct_month(browser, day) > 0:
             browser.find_element(By.CLASS_NAME, "BookingCalendar-nav--prev").click()
             attempts += 1
             if attempts > 12:
                 raise BookingError("Failed to find correct month by going backwards.")
 
         attempts = 0
-        while self.days_to_correct_month(browser, day) > 0:
+        while self.days_to_correct_month(browser, day) < 0:
             browser.find_element(By.CLASS_NAME, "BookingCalendar-nav--next").click()
             attempts += 1
             if attempts > 12:
