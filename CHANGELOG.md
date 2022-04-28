@@ -2,6 +2,14 @@
 
 <!--next-version-placeholder-->
 
+## v0.18.0 (2022-04-28)
+### Feature
+* Search in correct direction to get to day. ([`45bb8d7`](https://github.com/2e0byo/YADC/commit/45bb8d7e08132fbaf7db86592710aac279946e37))
+
+### Fix
+* Update 'no tests' string. ([`ff00a3a`](https://github.com/2e0byo/YADC/commit/ff00a3a0ab34c20ba898230c83b8e2e8d070c79c))
+* **scraper:** Search in correct direction. ([`3cf362a`](https://github.com/2e0byo/YADC/commit/3cf362a186615a0ee5b8fb370bae30bd7be139be))
+
 ## v0.17.0 (2022-03-18)
 ### Fix
 * **scraper:** Type before -> not_before. ([`2850ecb`](https://github.com/2e0byo/YADC/commit/2850ecb1ca48804d4cfee3e1d47d36612a4d2261))
