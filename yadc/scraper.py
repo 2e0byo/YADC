@@ -272,7 +272,7 @@ class Scraper:
         ):
             browser.bypass()  # is this needed now we handle on getting?
 
-        if "no tests available" in page:
+        if "no tests that meet your requirements" in page:
             self._logger.info("No tests available.")
             return back
 
