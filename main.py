@@ -32,7 +32,7 @@ driver = Driver(
 # get a scraper for a driver or drivers.
 s = Scraper(
     TorBrowser(
-        buster=Path("buster"),
+        buster=Path("buster"),# write the path of unzip buster files here !
         chrome="chromium",
         tor=Path("/path/to/tor"),  # probably not needed on *nix
     ),
