@@ -1,3 +1,5 @@
+**[YADC is not under active development any more.  If someone would like to take over, contact me.]**
+
 # YADC: Yet Another (DVSA) cancellations Checker
 
 YADC is yet another checker for driving cancellations in the UK.
