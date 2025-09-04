@@ -68,7 +68,7 @@ needs to be installed and executable as the user running your \`main.py\`.
 
 -   clone the repo
 -   run `poetry install`
--   run `poetry shell`
+-   run `poetry env activate`
 -   (optional) to download [buster](https://github.com/dessant/buster/releases) and unzip it.
 -   (optional) install `tor` and ensure it can be run as a user.
 -   edit `main.py` with your setup.
